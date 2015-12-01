@@ -1,0 +1,41 @@
+<ion-view view-title="간편매입 등록">
+  <ion-content>
+   <form>
+   <div align="center"> 
+   기본 입력사항<hr>
+	</div>
+	    <div align="center">
+
+	    <label class="item item-input" style="border:0;">
+		  <i class="ion-record">&nbsp;&nbsp;매입일&nbsp;</i>
+		  <input type="text" style="text-align:center;" ng-model="maipbasiclist.maip_date">
+		</label>
+
+		<label class="item item-input" style="border:0;">
+		  <i class="ion-record">&nbsp;&nbsp;수불구분&nbsp;</i>
+		  <ion-radio ng-model="choice" ng-click="kindF(224)">입고</ion-radio>
+		  <ion-radio ng-model="choice" ng-click="kindF(212)">반품</ion-radio>
+		</label>
+		<INPUT type="text" ng-model="maipbasiclist.subul_kind">
+		<div class="item item-input" style="border:0;">
+		  <i class="ion-record">&nbsp;&nbsp;거래처&nbsp;</i>
+		  <input type="text" ng-model="G_Name" style="text-align:center;">
+		  <button class="button button-stable" ng-click="customer()" size="10">검색</button>&nbsp;
+		</div>
+
+		<label class="item item-input item-select" style="border:0;">
+		  <i class="ion-record">&nbsp;&nbsp;창고지정</i>
+		  <select>
+		      <option ng-repeat="x in storelists">{{x.Sale_Place_Name}}</option>
+		    </select>
+		</label>
+
+		<label class="item item-input" style="border:0;">
+		  <i class="ion-record">&nbsp;&nbsp;매장지정</i>
+		</label>
+
+	    <hr>
+	   	</div>
+   </form> 
+  </ion-content>
+</ion-view>

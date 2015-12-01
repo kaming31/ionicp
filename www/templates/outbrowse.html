@@ -1,0 +1,38 @@
+<ion-view view-title="매출전표 조회">
+<ion-nav-buttons side="right">
+        <button menu-toggle="right" onclick="location.href='#/app/sub'">등록
+        </button>
+</ion-nav-buttons>
+  <ion-content>
+   <center>
+   <form>
+   <button>매출</button><button>매입</button>
+<hr>
+   <table>
+	   <tr>
+	   		<td>검 색</td>
+	   		<td><input type="text" size="15" name='search' style="border:1px solid #eee;"/></td>
+	   		<td><button>검색</button></td>
+	   </tr>
+	   <tr>
+	   		<td>일 자</td>
+	   		<td><input type="date" name='date1' style="border:1px solid #eee;"/></td>
+	   		<td><center>~</center></td>
+	   		<td><input type="date" size="10" name='date2' style="border:1px solid #eee;"/></td>
+	   </tr>
+   </table>
+   <br>
+   <table>
+   		<tr>
+   			<td><button> 금일 </button></td>
+   			<td><button> 1주일 </button></td>
+   			<td><button> 1개월</button></td>
+   		</tr>
+   </table>
+   <hr>
+   <div ng-repeat="">
+   </div>
+   </center>
+   </form>
+  </ion-content>
+</ion-view>
