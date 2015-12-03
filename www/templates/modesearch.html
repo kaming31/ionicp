@@ -5,4 +5,29 @@
       <button class="button button-clear" ng-click="closemodesear()">Close</button>
     </div>
   </ion-header-bar>
+  <ion-content>
+  <table>
+  	<tr>
+  		<td>
+		  <label class="item item-input">
+			  <i class="icon ion-search placeholder-icon"></i>
+			  <input type="search" placeholder="{{ex}}" size="40" ng-model="modedivition.seaname">
+		  </label>
+		</td>
+		<td>
+		 <a class="button" ng-click="divisionSearch()">검색</a>
+		</td>
+	</tr>
+  </table>
+  <any ng-repeat="x in goodslists">
+  <table>
+	<tr ng-click="listadd(x.G_Name)">
+	<td>
+			{{x.G_Name}}
+	</td>
+	</tr>
+  </table>
+  </any>
+  </ion-content>
+  </ion-modal-view>
 

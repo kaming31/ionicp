@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['ngCordova'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $http) {
 $scope.httpUrl = '/app';
@@ -306,30 +306,41 @@ $scope.reqparams={
      $scope.GoodsNamelist={
        Admin_Code : 'onz',
        UserId : 'pikapika',
-       Kind : 'ERPia_Sale_Select_GerName',
+       Kind : 'ERPia_Sale_Select_Goods',
        Mode : 'Select_GoodsName',
        GoodsName : ''
    };
    //상품코드 조회시
-     $scope.changolist={
+     $scope.goodscodelist={
        Admin_Code : 'onz',
        UserId : 'pikapika',
-       Kind : 'ERPia_Sale_Select_GerName',
+       Kind : 'ERPia_Sale_Select_Goods',
        Mode : 'Select_G_Code',
-       G_Code : ''
+       GoodsCode : ''
    };
    //자체코드 조회시
      $scope.G_OnCodelist={
        Admin_Code : 'onz',
        UserId : 'pikapika',
-       Kind : 'ERPia_Sale_Select_GerName',
+       Kind : 'ERPia_Sale_Select_Goods',
        Mode : 'Select_G_OnCode',
        G_OnCode : ''
    };
 
    $scope.modedivition = {
-      mode : ''
+      mode : '',
+      seaname : ''
     };
+
+    $scope.scanBarcode = function() {
+        $cordovaBarcodeScanner.scan().then(function(imageData) {
+            alert(imageData.text);
+            console.log("Barcode Format -> " + imageData.format);
+            console.log("Cancelled -> " + imageData.cancelled);
+        }, function(error) {
+            console.log("다시시도해주세요 ->" + error);
+        });
+    }
 
     //검색 Modal
     $ionicModal.fromTemplateUrl('templates/modesearch.html', {
@@ -345,13 +356,21 @@ $scope.reqparams={
 
     // 검색창 보여주기
     $scope.modesear = function(divimode) {
+      $scope.modedivition.seaname='';
+      $scope.goodslists='';
       if (divimode == "Select_GoodsName") {
         $scope.checkval = "상품명조회";
+        $scope.ex = "상품명을 입력해주세요";
+        $scope.exs = 1;
       }else{
         if ($scope.modedivition.mode == "Select_G_Code") {
             $scope.checkval = "상품코드조회";
+            $scope.ex = "상품코드를 입력해주세요";
+            $scope.exs = 2;
             }else{
                    $scope.checkval = "자체코드조회";
+                   $scope.ex = "자체코드를 입력해주세요";
+                   $scope.exs = 3;
                  };
       };
     $scope.modalmodesear.show();
@@ -361,17 +380,83 @@ $scope.reqparams={
 
    //검색구분
     $scope.divisionSearch=function(){
-      $scope.checkval = $scope.modedivition.mode;
+      $scope.checkd = $scope.modedivition.mode;
+      alert("확인좀=>" + $scope.modedivition.seaname);
 
-      if ($scope.checkval == "Select_G_Code") {
+      if ($scope.checkval == "상품명조회") {
+        alert("상품명조회");
+        $scope.GoodsNamelist.GoodsName = $scope.modedivition.seaname;
+        $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.GoodsNamelist}).
+      success(function(data, status, headers, config) {
+
+        $scope.goodslists = data.list;
+      }).
+      error(function(data, status, headers, config) {
+
+        var alertPopup = $ionicPopup.alert({
+
+                title: 'Login failed!',
+
+                template: 'Please check your credentials!'
+      });
+      });
+
+      }else if ($scope.checkval == "상품코드조회") { 
         alert("상품코드조회");
+        $scope.goodscodelist.GoodsCode = $scope.modedivition.seaname;
+        $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.goodscodelist}).
+      success(function(data, status, headers, config) {
+
+        $scope.goodslists = data.list;
+      }).
+      error(function(data, status, headers, config) {
+
+        var alertPopup = $ionicPopup.alert({
+
+                title: 'Login failed!',
+
+                template: 'Please check your credentials!'
+      });
+      });
+
       }else{
         alert("자체코드조회");
+        $scope.G_OnCodelist.G_OnCode = $scope.modedivition.seaname
+        $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.G_OnCodelist}).
+      success(function(data, status, headers, config) {
+
+        $scope.goodslists = data.list;
+      }).
+      error(function(data, status, headers, config) {
+
+        var alertPopup = $ionicPopup.alert({
+
+                title: 'Login failed!',
+
+                template: 'Please check your credentials!'
+      });
+      });
+
       };
 
+
     }
+    $scope.addlists = [];
 
+     $scope.listadd=function(listval){
+      alert("안뇽안뇽" + listval);
+      $scope.addlists.push({
+            namegoods: listval
+        });
+      $scope.modalmodesear.hide();
+     }
 
+     $scope.goodsinsertF=function(){
+      alert("등록시킬꺼야");
+
+     }
+     
+     
 });
 
 
