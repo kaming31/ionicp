@@ -48,6 +48,7 @@
 	   	</div>
 	   	<hr>
 	   	<any ng-repeat="x in lists | filter: listSearch track by $index" ng-if="$index < listindex">
+	   	<a ng-click="ss()">
 	<table>
 	   	<tr>
 		   	<td width="20%" align="center">품명</td>
@@ -66,6 +67,7 @@
 		   	<td width="80%" align="center">{{x.MeaChul_Amt}}</td>
 		</tr>
 	</table>
+	</a>
 	<button ng-click="more()" ng-if="$index + 1 == listindex">더보기</button>
 	<hr>
 	</any>

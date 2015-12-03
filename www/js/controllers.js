@@ -22,7 +22,7 @@ $scope.httpUrl = '/app';
 })
 
 //매입조회컨트롤러
-.controller('MaipSearchCtrl', function($scope, $stateParams,$ionicPopup,$http,$ionicModal) {
+.controller('MaipSearchCtrl', function($scope, $stateParams,$ionicPopup,$http,$ionicModal, $ionicHistory) {
 
 $scope.httpUrl = '/app';
 $scope.andUrl = 'http://erpia.net';
@@ -297,6 +297,30 @@ $scope.reqparams={
       });
 
     }
+
+    //뒤로 제어
+     $scope.backtest=function(){
+      $ionicPopup.show({
+         title: '경고',
+         subTitle: '',
+         content: '작성중인 내용이 지워집니다.<br> 계속진행하시겠습니까?',
+         buttons: [
+           { text: 'No',
+            onTap: function(e){
+              
+            }
+           },
+           {
+             text: 'Yes',
+             type: 'button-positive',
+             onTap: function(e) {
+                  $ionicHistory.goBack();
+             }
+           },
+         ]
+        })
+     }
+
 })
 
 
@@ -455,8 +479,8 @@ $scope.reqparams={
       alert("등록시킬꺼야");
 
      }
-     
-     
+
+
 });
 
 
