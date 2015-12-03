@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers'])
+var exampleApp = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -69,7 +69,31 @@ angular.module('starter', ['ionic', 'starter.controllers'])
           controller: 'MaipSearchCtrl'
         }
       }
+    })
+
+    .state('app.sub2', {
+      url: '/sub2',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/sub2.html',
+          controller: 'MaippartsCtrl'
+        }
+      }
     });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');
+});
+
+exampleApp.controller("ExampleController", function($scope, $cordovaBarcodeScanner) {
+ 
+    $scope.scanBarcode = function() {
+        $cordovaBarcodeScanner.scan().then(function(imageData) {
+            alert(imageData.text);
+            console.log("Barcode Format -> " + imageData.format);
+            console.log("Cancelled -> " + imageData.cancelled);
+        }, function(error) {
+            console.log("An error happened -> " + error);
+        });
+    }
+ 
 });

@@ -1,0 +1,35 @@
+<ion-view view-title="간편매입 등록">
+  <ion-content>
+   <form>
+   <div align="center"> 
+   상품 검색<hr>
+	 <div class="button-bar" style="align:center;">
+    &nbsp;&nbsp;<select style="width:30%" ng-model="modedivition.mode" ng-change='modesear()'>
+      <option value="Select_G_OnCode">자체코드</option>
+      <option value="Select_G_Code">상품코드</option>
+    </select>
+	  <a class="button" ng-controller="ExampleController" ng-click="scanBarcode()" style="width:30%">바코드</a>&nbsp;
+	 </div>
+
+  <div class="button-bar" style="width:100% align:center; padding:5px; border:1px solid #eee;">
+    &nbsp;&nbsp;<i class="icon ion-search placeholder-icon"s></i>
+    <input type="text" placeholder="상품명을 입력하세요" size="40">
+    <a class="button" ng-click="modesear('Select_GoodsName')">검색</a>
+  </div>
+
+	<div align="center"> 
+   		상품 등록<hr>
+   	<table width="100%" style="text-align:center;">
+   		<tr bgcolor="#EAEAEA">
+   			<td>상품명</td>
+   			<td>수 량</td>
+   			<td>단 가</td>
+   		</tr>
+   	</table>
+   	<hr>
+   	</div>
+
+   </div>
+   </form> 
+  </ion-content>
+</ion-view>

@@ -24,18 +24,24 @@
 		</div>
 
 		<label class="item item-input item-select" style="border:0;">
-		  <i class="ion-record">&nbsp;&nbsp;창고지정</i>
-		  <select>
-		      <option ng-repeat="x in storelists">{{x.Sale_Place_Name}}</option>
-		    </select>
-		</label>
-
-		<label class="item item-input" style="border:0;">
 		  <i class="ion-record">&nbsp;&nbsp;매장지정</i>
+		  <select ng-model="maipbasiclist.Mejang_Code" ng-change='Chango()'>
+		     <option ng-repeat="x in storelists" value="{{x.Sale_Place_Code}}" >{{x.Sale_Place_Name}}</option>
+		  </select>
 		</label>
 
+		<label class="item item-input item-select" style="border:0;">
+		  <i class="ion-record">&nbsp;&nbsp;창고지정</i>
+		  <select ng-model="maipbasiclist.ChangGo_Code">
+		  		 <option ng-repeat="x in changolists" value="{{x.Code}}">{{x.Name}}</option>
+		  </select>
+		</label>
 	    <hr>
+	    <ion-item href="#/app/sub2">
+	    다음단계
+	    </ion-item>
 	   	</div>
+
    </form> 
   </ion-content>
 </ion-view>
