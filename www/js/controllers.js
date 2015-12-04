@@ -15,13 +15,7 @@ $scope.httpUrl = '/app';
 
 })
 
-
-.controller('PlaylistCtrl', function($scope, $stateParams,$ionicPopup,$http) {
-
-
-})
-
-//매입조회컨트롤러
+/* 매입조회컨트롤러 */
 .controller('MaipSearchCtrl', function($scope, $stateParams,$ionicPopup,$http,$ionicModal, $ionicHistory) {
 
 $scope.httpUrl = '/app';
@@ -31,30 +25,33 @@ $scope.listSearch = ''; //상품명 검색
 $scope.listindex = 5; //더보기 5개씩
 
 
-/*거래처검색--------------------------------------*/
+/* 거래처검색 */
   $scope.customerSearchlists ={
       Admin_Code : 'onz',
       UserId : 'pikapika',
-      Kind : 'ERPia_Sale_Select_GerName',
+      Kind : 'ERPia_Meaip_Select_GerName',
       Mode : '',
       GerName : ''
     };
+
+/* 거래처검색 modal생성 */
 $ionicModal.fromTemplateUrl('templates/customer.html', {
     scope: $scope
   }).then(function(modal) {
     $scope.modalcustomer = modal;
   });
 
-   // 거래처 창 닫기
+ /* 거래처 창 닫기 */
   $scope.closecustomer = function() {
     $scope.modalcustomer.hide();
   };
 
-  // 거래처검색창 보여주기
+ /* 거래처검색창 보여주기 */
   $scope.customer = function() {
     $scope.modalcustomer.show();
   };
-  // 거래처 검색
+
+ /* 거래처 검색 */
   $scope.cusSearch = function(){
     $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.customerSearchlists}).
       success(function(data, status, headers, config) {
@@ -65,7 +62,7 @@ $ionicModal.fromTemplateUrl('templates/customer.html', {
 
         var alertPopup = $ionicPopup.alert({
 
-                title: 'Login failed!',
+                title: 'Search failed!',
 
                 template: 'Please check your credentials!'
 
@@ -73,12 +70,12 @@ $ionicModal.fromTemplateUrl('templates/customer.html', {
       });
   };
 
-//더보기 처리
+/* 더보기 처리 */
  $scope.more=function(){
   $scope.listindex = $scope.listindex + 5;
  }
 
-//날짜계산
+/* 날짜계산 */
 $scope.dateMinus=function(days){
 
     var nday = new Date();  //오늘 날짜..  
@@ -465,21 +462,28 @@ $scope.reqparams={
 
 
     }
+    /* 배열생성해서 ADD */
     $scope.addlists = [];
 
      $scope.listadd=function(listval){
-      alert("안뇽안뇽" + listval);
       $scope.addlists.push({
             namegoods: listval
         });
       $scope.modalmodesear.hide();
      }
+     /* 해당 리스트항목 삭제 */
+     $scope.goodsDelete=function(){
 
+     }
+
+     /* 매입등록 */
      $scope.goodsinsertF=function(){
       alert("등록시킬꺼야");
 
      }
-
+     $scope.ss=function(){
+      alert("안녕");
+     }
 
 });
 
