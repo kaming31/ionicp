@@ -99,7 +99,7 @@ $scope.todate=$scope.dateMinus(0);
 $scope.reqparams={
       Admin_Code : 'onz',
       UserId : 'pikapika',
-      Kind : 'ERPia_Sale_Select_Master',
+      Kind : 'ERPia_Meaip_Select_Master',
       Mode : 'Select_Date',
       Sl_No : '',
       sDate : $scope.todate,
@@ -230,18 +230,19 @@ $scope.reqparams={
 
     $scope.G_Name='';
     $scope.G_Name2='';
+
     //매장조회 배열
     $scope.storelist={
       Admin_Code : 'onz',
       UserId : 'pikapika',
-      Kind : 'ERPia_Sale_Select_Place_CName',
+      Kind : 'ERPia_Meaip_Select_Place_CName',
       Mode : 'Select_Place'
     };
     //매장코드로 창고리스트조회 배열
      $scope.changolist={
        Admin_Code : 'onz',
        UserId : 'pikapika',
-       Kind : 'ERPia_Sale_Select_Place_CName',
+       Kind : 'ERPia_Meaip_Select_Place_CName',
        Mode : 'Select_CName',
        Sale_Place_Code : 0
    }
@@ -321,13 +322,13 @@ $scope.reqparams={
 })
 
 
-.controller('MaippartsCtrl', function($scope, $ionicModal, $timeout, $stateParams, $http, $cordovaBarcodeScanner) {
+.controller('MaippartsCtrl', function($scope, $ionicModal, $timeout, $stateParams, $http, $cordovaBarcodeScanner, $ionicPopup) {
 
 //상품명 조회시
      $scope.GoodsNamelist={
        Admin_Code : 'onz',
        UserId : 'pikapika',
-       Kind : 'ERPia_Sale_Select_Goods',
+       Kind : 'ERPia_Meaip_Select_Goods',
        Mode : 'Select_GoodsName',
        GoodsName : ''
    };
@@ -335,7 +336,7 @@ $scope.reqparams={
      $scope.goodscodelist={
        Admin_Code : 'onz',
        UserId : 'pikapika',
-       Kind : 'ERPia_Sale_Select_Goods',
+       Kind : 'ERPia_Meaip_Select_Goods',
        Mode : 'Select_G_Code',
        GoodsCode : ''
    };
@@ -343,9 +344,17 @@ $scope.reqparams={
      $scope.G_OnCodelist={
        Admin_Code : 'onz',
        UserId : 'pikapika',
-       Kind : 'ERPia_Sale_Select_Goods',
+       Kind : 'ERPia_Meaip_Select_Goods',
        Mode : 'Select_G_OnCode',
        G_OnCode : ''
+   };
+    //공인바코드 조회시
+     $scope.Barcodelist={
+       Admin_Code : 'onz',
+       UserId : 'pikapika',
+       Kind : 'ERPia_Meaip_Select_Goods',
+       Mode : 'Select_GI_Code',
+       GI_Code : ''
    };
 
    $scope.modedivition = {
@@ -358,6 +367,44 @@ $scope.reqparams={
             alert(imageData.text);
             console.log("Barcode Format -> " + imageData.format);
             console.log("Cancelled -> " + imageData.cancelled);
+            $scope.Barcodelist.GI_Code = imageData.text;
+        $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.Barcodelist}).
+            success(function(data, status, headers, config) {
+
+              $scope.Barlists = data.list;
+              alert("확인=>" + Barlists.G_Name);
+              $ionicPopup.show({
+              template: '<input type="text">',
+              title: $scope.Barlists.G_Name,
+              subTitle: '수량을 입력해주세요.',
+              scope: $scope,
+              buttons: [
+                { text: 'Cancel' },
+                {
+                  text: '<b>333</b>',
+                  type: 'button-positive',
+                  onTap: function(e) {
+                    if (!$scope.Barcodelist.GI_Code) {
+                      alert("실패");
+                      e.preventDefault();
+                    } else {
+                      return $scope.Barcodelist.GI_Code;
+                    }
+                  }
+                }
+              ]
+            })
+
+            }).
+            error(function(data, status, headers, config) {
+
+              var alertPopup = $ionicPopup.alert({
+
+                      title: 'Error',
+
+                      template: '값을 성공적으로 받아오지 못했습니다!'
+            });
+            });
         }, function(error) {
             console.log("다시시도해주세요 ->" + error);
         });
