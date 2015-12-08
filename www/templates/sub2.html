@@ -31,9 +31,9 @@
       </tr>
       <tr ng-repeat="y in addlists">
         <td>{{y.namegoods}}</td>
-        <td><input type="number" min="0" max="999"></td>
-        <td>5000</td>
-        <td><i class="ion-android-remove-circle" ng-click="goodsDelete()"></i>&nbsp;</td>
+        <td><input type="number" min="1" max="999" value=1></td>
+        <td>{{y.gdngoods}}</td>
+        <td><i class="ion-android-remove-circle" ng-click="goodsDelete($index)"></i>&nbsp;</td>
       </tr>
    	</table>
     <br>
