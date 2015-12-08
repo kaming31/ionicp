@@ -16,7 +16,7 @@ $scope.httpUrl = '/app';
 })
 
 /* 매입조회컨트롤러 */
-.controller('MaipSearchCtrl', function($scope, $stateParams,$ionicPopup,$http,$ionicModal, $ionicHistory) {
+.controller('MaipSearchCtrl', function($scope, $stateParams,$ionicPopup,$http,$ionicModal, $ionicHistory,$location) {
 
 $scope.httpUrl = '/app';
 $scope.andUrl = 'http://erpia.net';
@@ -215,6 +215,33 @@ $scope.reqparams={
 
       });
       });
+      //매출전표조회 배열
+      $scope.meaipChitList={
+        Admin_Code : 'onz',
+        UserId : 'pikapika',
+        Kind : 'ERPia_Meaip_Select_Detail',
+        Mode : '',
+        IL_No : ''
+      };
+      //매출전표조회 function
+     $scope.meaipChitF=function(ilno){
+      $scope.meaipChitList.IL_No = ilno;
+      $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.meaipChitList}).
+        success(function(data, status, headers, config) {
+
+        $scope.meaipchitlists = data.list;
+        $location.href('#/app/inbrowse');
+      }).
+        error(function(data, status, headers, config) {
+
+        var alertPopup = $ionicPopup.alert({
+
+                title: 'Login failed!',
+
+                template: 'Please check your credentials!'
+      });
+      });
+     }
     }
 
     /*매입 등록 기본사항-----------------------------*/
@@ -323,7 +350,8 @@ $scope.reqparams={
 
 
 .controller('MaippartsCtrl', function($scope, $ionicModal, $timeout, $stateParams, $http, $cordovaBarcodeScanner, $ionicPopup) {
-
+$scope.httpUrl = '/app';
+$scope.andUrl = 'http://erpia.net';
 //상품명 조회시
      $scope.GoodsNamelist={
        Admin_Code : 'onz',
@@ -354,7 +382,7 @@ $scope.reqparams={
        UserId : 'pikapika',
        Kind : 'ERPia_Meaip_Select_Goods',
        Mode : 'Select_GI_Code',
-       GI_Code : ''
+       GI_Code : 0
    };
 
    $scope.modedivition = {
@@ -368,33 +396,34 @@ $scope.reqparams={
             console.log("Barcode Format -> " + imageData.format);
             console.log("Cancelled -> " + imageData.cancelled);
             $scope.Barcodelist.GI_Code = imageData.text;
-        $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.Barcodelist}).
+
+        $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.Barcodelist}).
             success(function(data, status, headers, config) {
-
               $scope.Barlists = data.list;
-              alert("확인=>" + Barlists.G_Name);
-              $ionicPopup.show({
-              template: '<input type="text">',
-              title: $scope.Barlists.G_Name,
-              subTitle: '수량을 입력해주세요.',
-              scope: $scope,
-              buttons: [
-                { text: 'Cancel' },
-                {
-                  text: '<b>333</b>',
-                  type: 'button-positive',
-                  onTap: function(e) {
-                    if (!$scope.Barcodelist.GI_Code) {
-                      alert("실패");
-                      e.preventDefault();
-                    } else {
-                      return $scope.Barcodelist.GI_Code;
-                    }
-                  }
-                }
-              ]
-            })
-
+              if ($scope.Barlists != null) {
+                      //바코드 검색결과 팝업
+                      $ionicPopup.show({
+                           title: '등록하시겠습니까?',
+                           subTitle: '',
+                           content: '코드번호 : ' + $scope.Barlists[0].G_Code + '<br> 상품명 : ' + $scope.Barlists[0].G_Name,
+                           buttons: [
+                             { text: 'No',
+                              onTap: function(e){
+                                
+                              }
+                             },
+                             {
+                               text: 'Yes',
+                               type: 'button-positive',
+                               onTap: function(e) {
+                                    $scope.listadd($scope.Barlists[0].G_Name,$scope.Barlists[0].G_Dn5);
+                               }
+                             },
+                           ]
+                          })
+              }else{
+                alert("해당 바코드와 일치하는 상품이 없습니다.");
+              };
             }).
             error(function(data, status, headers, config) {
 
@@ -408,6 +437,7 @@ $scope.reqparams={
         }, function(error) {
             console.log("다시시도해주세요 ->" + error);
         });
+        
     }
 
     //검색 Modal
@@ -512,15 +542,17 @@ $scope.reqparams={
     /* 배열생성해서 ADD */
     $scope.addlists = [];
 
-     $scope.listadd=function(listval){
-      $scope.addlists.push({
-            namegoods: listval
-        });
+     $scope.listadd=function(name,gdn){
+
+     $scope.addlists.push({
+         namegoods : name,
+         gdngoods : gdn
+     });
       $scope.modalmodesear.hide();
      }
      /* 해당 리스트항목 삭제 */
-     $scope.goodsDelete=function(){
-
+     $scope.goodsDelete=function(index){
+        $scope.addlists.splice(index,1);
      }
 
      /* 매입등록 */
@@ -528,8 +560,9 @@ $scope.reqparams={
       alert("등록시킬꺼야");
 
      }
-     $scope.ss=function(){
+     $scope.ss=function(zz){
       alert("안녕");
+      alert("ㅋㅋ" + zz);
      }
 
 });

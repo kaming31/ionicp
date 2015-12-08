@@ -79,6 +79,15 @@ var exampleApp = angular.module('starter', ['ionic', 'starter.controllers', 'ngC
           controller: 'MaippartsCtrl'
         }
       }
+    })
+    .state('app.meaipChit', {
+      url: '/meaipChit',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/meaipChit.html',
+          controller: 'MaippartsCtrl'
+        }
+      }
     });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/playlists');

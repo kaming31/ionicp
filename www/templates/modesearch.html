@@ -19,15 +19,21 @@
 		</td>
 	</tr>
   </table>
-  <any ng-repeat="x in goodslists">
-  <table>
-	<tr ng-click="listadd(x.G_Name)">
-	<td>
-			{{x.G_Name}}
-	</td>
+  <table width="100%">
+  <tr>
+    <td width="33%">상품코드</td>
+    <td width="33%">상품명</td>
+    <td width="33%">단  가</td>
+  </tr>
+  <tr>
+   <td colspan="3"><hr></td> 
+  </tr>
+	<tr ng-click="listadd(x.G_Name,x.G_Dn5)" ng-repeat="x in goodslists">
+  	<td>{{x.G_Code}}</td>
+    <td>{{x.G_Name}}</td>
+    <td>{{x.G_Dn5}}</td>
 	</tr>
   </table>
-  </any>
   </ion-content>
   </ion-modal-view>
 
