@@ -16,7 +16,7 @@ $scope.httpUrl = '/app';
 })
 
 /* 매입조회컨트롤러 */
-.controller('MaipSearchCtrl', function($scope, $stateParams,$ionicPopup,$http,$ionicModal, $ionicHistory,$location) {
+.controller('MaipSearchCtrl', function($scope, $stateParams,$ionicPopup,$http,$ionicModal, $ionicHistory,$location,$rootScope) {
 
 $scope.httpUrl = '/app';
 $scope.andUrl = 'http://erpia.net';
@@ -78,7 +78,7 @@ $ionicModal.fromTemplateUrl('templates/customer.html', {
 /* 날짜계산 */
 $scope.dateMinus=function(days){
 
-    var nday = new Date();  //오늘 날짜..  
+    var nday = new Date();  //오늘 날짜  
     nday.setDate(nday.getDate() - days); //오늘 날짜에서 days만큼을 뒤로 이동 
 
     var yy = nday.getFullYear();
@@ -101,14 +101,12 @@ $scope.reqparams={
       UserId : 'pikapika',
       Kind : 'ERPia_Meaip_Select_Master',
       Mode : 'Select_Date',
-      Sl_No : '',
       sDate : $scope.todate,
       eDate : $scope.todate
     };
     //금일 데이터 기본값으로 얻어오기
     $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.reqparams}).
       success(function(data, status, headers, config) {
-
         $scope.lists = data.list;
       }).
       error(function(data, status, headers, config) {
@@ -121,8 +119,15 @@ $scope.reqparams={
       });
       });
 
-
+    $scope.sedate={
+      Sdate : '',
+      Edate : ''
+    };
     $scope.searches=function(){
+    $scope.reqparams.sdate = $scope.sedate.Sdate;
+    $scope.reqparams.edate = $scope.sedate.Edate;
+    alert("?="+$scope.reqparams.edate);
+
        // CORS 요청 데모
     $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.reqparams}).
       success(function(data, status, headers, config) {
@@ -223,14 +228,15 @@ $scope.reqparams={
         Mode : '',
         IL_No : ''
       };
+
       //매출전표조회 function
      $scope.meaipChitF=function(ilno){
       $scope.meaipChitList.IL_No = ilno;
       $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.meaipChitList}).
         success(function(data, status, headers, config) {
 
-        $scope.meaipchitlists = data.list;
-        $location.href('#/app/inbrowse');
+        $rootScope.meaipchitlists = data.list;
+        location.href="#/app/meaipChit";
       }).
         error(function(data, status, headers, config) {
 
