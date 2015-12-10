@@ -151,7 +151,7 @@ $scope.reqparams={
       $scope.reqparams.sDate=$scope.dateMinus(0);
      $scope.reqparams.eDate=$scope.dateMinus(0);
        // CORS 요청 데모
-    $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.reqparams}).
+    $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.reqparams}).
       success(function(data, status, headers, config) {
 
         $scope.lists = data.list;
@@ -229,13 +229,20 @@ $scope.reqparams={
         IL_No : ''
       };
 
-      //매출전표조회 function
+      //매입전표조회 function
      $scope.meaipChitF=function(ilno){
       $scope.meaipChitList.IL_No = ilno;
       $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.meaipChitList}).
         success(function(data, status, headers, config) {
 
         $rootScope.meaipchitlists = data.list;
+        $rootScope.qtysum = 0;//총 수량
+        $rootScope.pricesum = 0;//총 가격
+        for (var i = 0; i < $rootScope.meaipchitlists.length; i++) {
+          $rootScope.qtysum = parseInt($rootScope.qtysum) + parseInt($rootScope.meaipchitlists[i].G_Qty);
+          $rootScope.gop = parseInt($rootScope.meaipchitlists[i].G_Qty)*parseInt($rootScope.meaipchitlists[i].G_Price);
+          $rootScope.pricesum = parseInt($rootScope.pricesum) + parseInt($rootScope.gop);
+      }
         location.href="#/app/meaipChit";
       }).
         error(function(data, status, headers, config) {
@@ -249,9 +256,45 @@ $scope.reqparams={
       });
      }
     }
+    //매입삭제배열
+    $scope.chitdeletelist={
+        Admin_Code : 'onz',
+        UserId : 'pikapika',
+        Kind : 'ERPia_Meaip_Delete_Goods',
+        Mode : 'Delete_Meaip',
+        IL_No : ''
+      };
+
+    $scope.chitDeleteF=function(ilno){
+      $scope.chitdeletelist.IL_No = ilno;
+      $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.chitdeletelist}).
+      success(function(data, status, headers, config) {
+
+        $scope.chitdelists = data.list;
+        if ($scope.chitdelists[0].rslt == "Y") {
+          alert("매입전표가 삭제되었습니다.");
+          $ionicHistory.goBack();
+          $scope.lists.refreshItems();
+        }else{
+          alert("삭제되지못했습니다.다시시도해주세요.");
+        };
+/*        $state.go('app.search');*/
+      }).
+      error(function(data, status, headers, config) {
+
+        var alertPopup = $ionicPopup.alert({
+
+                title: 'failed!',
+
+                template: 'Please check your credentials!'
+
+      });
+      });
+
+     }
 
     /*매입 등록 기본사항-----------------------------*/
-    $scope.maipbasiclist={
+    $rootScope.maipbasiclist={
           maip_date : $scope.todate, //매입날짜
           divide : '', //
           Admin_Code : 'onz',
@@ -261,7 +304,7 @@ $scope.reqparams={
           Mejang_Code : 0 //매장코드
     };
 
-    $scope.G_Name='';
+    $rootScope.G_Name='';
     $scope.G_Name2='';
 
     //매장조회 배열
@@ -351,6 +394,7 @@ $scope.reqparams={
          ]
         })
      }
+        
 
 })
 
@@ -398,12 +442,12 @@ $scope.andUrl = 'http://erpia.net';
 
     $scope.scanBarcode = function() {
         $cordovaBarcodeScanner.scan().then(function(imageData) {
-            alert(imageData.text);
+/*            alert(imageData.text);*/
             console.log("Barcode Format -> " + imageData.format);
             console.log("Cancelled -> " + imageData.cancelled);
             $scope.Barcodelist.GI_Code = imageData.text;
 
-        $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.Barcodelist}).
+        $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.Barcodelist}).
             success(function(data, status, headers, config) {
               $scope.Barlists = data.list;
               if ($scope.Barlists != null) {
@@ -485,10 +529,8 @@ $scope.andUrl = 'http://erpia.net';
    //검색구분
     $scope.divisionSearch=function(){
       $scope.checkd = $scope.modedivition.mode;
-      alert("확인좀=>" + $scope.modedivition.seaname);
 
       if ($scope.checkval == "상품명조회") {
-        alert("상품명조회");
         $scope.GoodsNamelist.GoodsName = $scope.modedivition.seaname;
         $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.GoodsNamelist}).
       success(function(data, status, headers, config) {
@@ -506,7 +548,6 @@ $scope.andUrl = 'http://erpia.net';
       });
 
       }else if ($scope.checkval == "상품코드조회") { 
-        alert("상품코드조회");
         $scope.goodscodelist.GoodsCode = $scope.modedivition.seaname;
         $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.goodscodelist}).
       success(function(data, status, headers, config) {
@@ -524,7 +565,6 @@ $scope.andUrl = 'http://erpia.net';
       });
 
       }else{
-        alert("자체코드조회");
         $scope.G_OnCodelist.G_OnCode = $scope.modedivition.seaname
         $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.G_OnCodelist}).
       success(function(data, status, headers, config) {
@@ -561,17 +601,27 @@ $scope.andUrl = 'http://erpia.net';
         $scope.addlists.splice(index,1);
      }
 
-     /* 매입등록 */
-     $scope.goodsinsertF=function(){
-      alert("등록시킬꺼야");
+      //등록확인 Modal
+    $ionicModal.fromTemplateUrl('templates/goodsinsertM.html', {
+    scope: $scope
+    }).then(function(modal) {
+    $scope.modeInsert = modal;
+    });
 
-     }
+    // 등록 Modal Close
+    $scope.closemodeInsert = function() {
+    $scope.modeInsert.hide();
+    };
+
+    // 등록 Modal show
+    $scope.goodsinsertF = function() {
+    $scope.modeInsert.show();
+   
+  };
+
      $scope.ss=function(zz){
       alert("안녕");
       alert("ㅋㅋ" + zz);
      }
 
 });
-
-
-

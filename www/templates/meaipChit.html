@@ -2,51 +2,91 @@
   <ion-content>
    <form>
    <div align="center"> 
-   <any ng-repeat="x in meaipchitlists">
+   <any ng-repeat="x in meaipchitlists | filter: listSearch track by $index" ng-if="$index < 1">
       {{x.iL_No}}<hr>
       <table>
         <tr width="100%">
-          <td width="40%" align="cneter">
+          <td width="30%" align="left">
             <i class="ion-record">&nbsp;&nbsp;일 자</i>
           </td>
-          <td width="60%" align="cneter">
+          <td width="70%" align="center">
             {{x.Meaip_Date}}
           </td>
         </tr>
         <tr>
-          <td width="40%" align="cneter">
+          <td width="30%" align="left">
             <i class="ion-record">&nbsp;&nbsp;구 분</i>
           </td>
-          <td width="60%" align="cneter">
+          <td width="70%" align="center">
             {{x.Subul_kind}}
           </td>
         </tr>
-        <tr>
-          <td width="40%" align="cneter">
+        <tr width="30%" align="left">
+          <td>
             <i class="ion-record">&nbsp;&nbsp;거래처</i>
           </td>
-          <td width="60%" align="cneter">
+          <td width="70%" align="center">
             {{x.GerName}}
           </td>
         </tr>
         <tr>
-          <td width="40%" align="cneter">
+          <td width="30%" align="left">
             <i class="ion-record">&nbsp;&nbsp;창고지정</i>
           </td>
-          <td width="60%" align="cneter">
+          <td width="70%" align="center">
             {{x.CName}}
           </td>
         </tr>
         <tr>
-          <td width="40%" align="cneter">
+          <td width="30%" align="left">
             <i class="ion-record">&nbsp;&nbsp;매장지정</i>
           </td>
-          <td width="60%" align="cneter">
+          <td width="70%" align="center">
             {{x.Sale_Place_Name}}
           </td>
         </tr>
       </table>
+      <hr>
    </any>
+         <table width="100%">
+          <tr width="100%">
+            <td width="40%" align="center">상품명</td>
+            <td width="20%" align="center">수량</td>
+            <td width="40%" align="center">단가</td>
+          </tr>
+          <tr>
+            <td colspan="3"><hr></td>
+          </tr>
+          <tr ng-repeat="y in meaipchitlists">
+            <td width="40%" align="center">
+              {{y.G_Name}}
+            </td>
+            <td width="20%" align="center">
+              {{y.G_Qty}}
+            </td>
+            <td width="40%" align="center">
+              {{y.G_Price}}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3"><hr></td>
+          </tr>
+          <tr>
+            <td colspan="3" align="right"><b>총 {{qtysum}}개 / {{pricesum}}원</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          </tr>
+        </table><br><br>
+        <table width="80%">
+          <tr>
+            <td width="50%" align="center">
+            <any ng-repeat="x in meaipchitlists | filter: listSearch track by $index" ng-if="$index < 1">
+              <a ng-click="chitDeleteF(x.iL_No)"><button>삭제</button></a>
+              </any>
+            </td>
+            <td width="50%" align="center">
+              <button>거래명세서</button>
+            </td>
+          </tr>
+        </table>
 	 </div>
    </form> 
   </ion-content>
