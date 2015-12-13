@@ -6,13 +6,53 @@
     </div>
   </ion-header-bar>
   <ion-content>
-  {{maipbasiclist.maip_date}}<br>
-  {{maipbasiclist.divide}}<br>
-  {{maipbasiclist.Comp_no}}<br>
-  {{maipbasiclist.subul_kind}}<br>
-  {{maipbasiclist.ChangGo_Code}}<br>
-  {{maipbasiclist.Mejang_Code}}<br>
-  {{G_Name}}zzzzzzzzzzzz
+   <form>
+   <div align="center"> 
+  <table width="80%">
+    <tr>
+      <td width="30%" align="left">
+        <i class="ion-record">&nbsp;&nbsp;일 자</i>
+      </td>
+      <td width="70%" align="center">
+        {{maipbasiclist.maip_date}}
+      </td>
+    </tr>
+    <tr>
+      <td width="30%" align="left">
+        <i class="ion-record">&nbsp;&nbsp;구 분</i>
+      </td>
+      <td width="70%" align="center">
+        {{maipbasiclist.subul_kind}}**{{meaipKorea.subulkorea}}
+      </td>
+    </tr>
+    <tr width="30%" align="left">
+      <td>
+        <i class="ion-record">&nbsp;&nbsp;거래처</i>
+      </td>
+      <td width="70%" align="center">
+        {{maipbasiclist.Comp_no}}**{{meaipKorea.G_Name}}
+      </td>
+    </tr>
+    <tr>
+      <td width="30%" align="left">
+        <i class="ion-record">&nbsp;&nbsp;창고지정</i>
+      </td>
+      <td width="70%" align="center">
+        {{maipbasiclist.ChangGo_Code}}**{{meaipKorea.changoKorea}}
+      </td>
+    </tr>
+    <tr>
+      <td width="30%" align="left">
+        <i class="ion-record">&nbsp;&nbsp;매장지정</i>
+      </td>
+      <td width="70%" align="center">
+        {{maipbasiclist.Mejang_Code}}**{{meaipKorea.MejangKorea}}
+      </td>
+    </tr>
+  </table>
+  <hr>
+  </div>
+  </form>
   </ion-content>
   </ion-modal-view>
 

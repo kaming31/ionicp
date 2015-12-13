@@ -1,0 +1,61 @@
+<ion-view view-title="간편매입 등록">
+	<ion-nav-bar>
+		<ion-nav-back-button ng-click="configback()">Back</ion-nav-back-button>
+	</ion-nav-bar>
+  <ion-content>
+  	<center>
+  		환경설정
+  		<hr>
+  	</center>
+	<table width="100%">
+		<tr>
+			<td width="50%" align="center">
+				기본매장 지정
+			</td>
+			<td width="50%" align="center">
+				<select ng-model="BasicConfiglist.basic_Place_Code" ng-change='ChangoConfig()'>
+			       <option ng-repeat="x in storelists" value="{{x.Sale_Place_Code}}" ng-selected="{{BasicConfiglist.basic_Place_Code}} == {{x.Sale_Place_Code}}">
+			       {{x.Sale_Place_Name}}//{{BasicConfiglist.basic_Place_Code}}</option>
+			    </select>
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				기본창고 지정
+			</td>
+			<td align="center">
+				<select ng-model="BasicConfiglist.basic_Ch_Code">
+		  		  <option ng-repeat="x in changolists" value="{{x.Code}}" ng-selected="{{BasicConfiglist.basic_Ch_Code}} == {{x.Code}}">
+		  		  {{x.Name}}</option>
+		  		</select>
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				기본 매입단가 지정
+			</td>
+			<td align="center">
+				<select ng-model="BasicConfiglist.basic_Dn_Meaip">
+		  		  <option ng-repeat="x in MeaipDn" value="{{x.num}}" ng-selected="{{BasicConfiglist.basic_Dn_Meaip}} == {{x.num}}">
+		  		  {{x.id}}</option>
+		  		</select>
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				기본 매출단가 지정
+			</td>
+			<td align="center">
+				<select>
+		  		  <option>????</option>
+		  		</select>
+			</td>
+		</tr>
+	</table>
+	<hr>
+	<ion-item ng-click="configFun()">
+      저장
+    </ion-item>
+  </ion-content>
+</ion-view>
+

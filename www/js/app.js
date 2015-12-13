@@ -80,6 +80,15 @@ var exampleApp = angular.module('starter', ['ionic', 'starter.controllers', 'ngC
         }
       }
     })
+    .state('app.Confiview', {
+      url: '/Confiview',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/Confiview.html',
+          controller: 'ConfigCtrl'
+        }
+      }
+    })
     .state('app.meaipChit', {
       url: '/meaipChit',
       views: {

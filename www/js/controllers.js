@@ -1,9 +1,15 @@
 angular.module('starter.controllers', ['ngCordova'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $rootScope) {
 $scope.httpUrl = '/app';
+$rootScope.userId = 'kmTest';
 
-
+//기본설정 저장배열
+$rootScope.BasicConfiglist = {
+  basic_Ch_Code : 0, // 창고코드
+  basic_Place_Code : 0, // 매장코드
+  basic_Dn_Meaip : 0 // 단가설정
+};
  
 })
 
@@ -12,6 +18,233 @@ $scope.httpUrl = '/app';
     { title: '매입등록', id: 1 },
     { title: '매출등록', id: 2 },
   ]; 
+
+
+})
+
+.controller('ConfigCtrl', function($scope, $http, $rootScope, $ionicHistory,$ionicPopup) {
+$scope.httpUrl = '/app';
+$scope.andUrl = 'http://erpia.net';
+
+    //환경설정 조회배열
+    $scope.configlist={
+      Admin_Code : 'onz',
+      UserId : 'pikapika',
+      Kind : 'ERPia_Meaip_Config',
+      Mode : 'select'
+    };
+
+    //매장코드로 창고리스트조회 배열
+    $scope.changolist={
+      Admin_Code : 'onz',
+      UserId : 'pikapika',
+      Kind : 'ERPia_Meaip_Select_Place_CName',
+      Mode : 'Select_CName',
+      Sale_Place_Code : 0
+    }
+    //매장조회 배열
+    $scope.storelist={
+      Admin_Code : 'onz',
+      UserId : 'pikapika',
+      Kind : 'ERPia_Meaip_Select_Place_CName',
+      Mode : 'Select_Place'
+    };
+
+    //환경설정 구분 1(insert) 2(update)
+    $rootScope.confinum = 1;
+
+    //단가지정배열 1. 매입가 2. 도매가 3. 인터넷가 4. 소매가 5. 권장소비자가
+    $scope.MeaipDn = [
+      { num: 1, id: '매입가' },
+      { num: 2, id: '도매가' },
+      { num: 3, id: '인터넷가' },
+      { num: 4, id: '소매가' },
+      { num: 5, id: '권장소비자가' }
+    ];
+
+    //환경설정 조회
+    $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.configlist}).
+      success(function(data, status, headers, config) {
+        $scope.configlists = data.list;
+
+        for (var i = 0; i < $scope.configlists.length; i++) {
+          if($scope.configlists[i].UserId == $rootScope.userId){
+
+            //조회된 값이있으면 환경설정 구분 변경 
+            $scope.confinum = 2;
+
+            //환경설정된 값을 다른 페이지에서 쓸수 있도록 전역변수에 옮겨 저장            
+            $scope.BasicConfiglist.basic_Ch_Code = $scope.configlists[i].basic_Ch_Code;
+            $scope.BasicConfiglist.basic_Place_Code = $scope.configlists[i].basic_Place_Code;
+            $scope.BasicConfiglist.basic_Dn_Meaip = $scope.configlists[i].basic_Dn_Meaip;
+
+                //기본매장 디폴트
+              $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.storelist}).
+                success(function(data, status, headers, config) {
+
+                  $scope.storelists = data.list;
+                }).
+                error(function(data, status, headers, config) {
+
+                  var alertPopup = $ionicPopup.alert({
+
+                          title: 'Login failed!',
+
+                          template: 'Please check your credentials!'
+                });
+                });
+
+            $scope.changolist.Sale_Place_Code = $scope.configlists[i].basic_Place_Code;
+                //기본창고 디폴트
+                $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.changolist}).
+                  success(function(data, status, headers, config) {
+                    $scope.changolists = data.list;
+                  }).
+                  error(function(data, status, headers, config) {
+
+                    var alertPopup = $ionicPopup.alert({
+
+                            title: 'Login failed!',
+
+                            template: 'Please check your credentials!'
+                  });
+                  });
+
+            break;
+          } else {
+                    
+          };
+
+        };
+
+        if ($scope.confinum == 1) {
+          alert("초기설정이 되어있지 않을때.");
+            //기본매장 디폴트
+              $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.storelist}).
+                success(function(data, status, headers, config) {
+
+                  $scope.storelists = data.list;
+                }).
+                error(function(data, status, headers, config) {
+
+                  var alertPopup = $ionicPopup.alert({
+
+                          title: 'Login failed!',
+
+                          template: 'Please check your credentials!'
+                });
+                });
+
+        };
+      }).
+      error(function(data, status, headers, config) {
+
+        var alertPopup = $ionicPopup.alert({
+
+                title: 'failed!',
+
+                template: '다시시도해 주세요!!'
+      });
+      });
+
+      $scope.ChangoConfig=function(){
+        $scope.changolist.Sale_Place_Code = $scope.BasicConfiglist.basic_Place_Code;
+                //기본창고 디폴트
+                $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.changolist}).
+                  success(function(data, status, headers, config) {
+                    $scope.changolists = data.list;
+                  }).
+                  error(function(data, status, headers, config) {
+
+                    var alertPopup = $ionicPopup.alert({
+
+                            title: 'Login failed!',
+
+                            template: 'Please check your credentials!'
+                  });
+                  });
+
+       }
+    $scope.confisavelist = {
+      Admin_Code : 'onz',
+      UserId : $scope.userId,
+      Kind : 'ERPia_Meaip_Config',
+      Mode : '',
+      basic_Ch_Code : 0,
+      basic_Place_Code : 0,
+      basic_Dn_Meaip : 0
+    };
+
+    //환경변수 설정
+    $scope.configFun=function(){
+      alert($scope.confinum);
+      if ($scope.confinum == 2) {
+        alert("update");
+        $scope.confisavelist.Mode = 'update';
+        $scope.confisavelist.basic_Ch_Code = $scope.BasicConfiglist.basic_Ch_Code;
+        $scope.confisavelist.basic_Place_Code = $scope.BasicConfiglist.basic_Place_Code;
+        $scope.confisavelist.basic_Dn_Meaip =  $scope.BasicConfiglist.basic_Dn_Meaip;
+
+        $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.confisavelist}).
+                  success(function(data, status, headers, config) {
+                    $scope.changolists = data.list;
+                  }).
+                  error(function(data, status, headers, config) {
+
+                    var alertPopup = $ionicPopup.alert({
+
+                            title: 'Login failed!',
+
+                            template: 'Please check your credentials!'
+                  });
+                  });
+
+      }else{
+        alert("insert");
+        $scope.confisavelist.Mode = 'insert';
+        $scope.confisavelist.basic_Ch_Code = $scope.BasicConfiglist.basic_Ch_Code;
+        $scope.confisavelist.basic_Place_Code = $scope.BasicConfiglist.basic_Place_Code;
+        $scope.confisavelist.basic_Dn_Meaip =  $scope.BasicConfiglist.basic_Dn_Meaip;
+
+        $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.confisavelist}).
+                  success(function(data, status, headers, config) {
+                    $scope.changolists = data.list;
+                  }).
+                  error(function(data, status, headers, config) {
+
+                    var alertPopup = $ionicPopup.alert({
+
+                            title: 'Login failed!',
+
+                            template: 'Please check your credentials!'
+                  });
+                  })
+      };
+
+    }
+
+       //뒤로 제어
+     $scope.configback=function(){
+      $ionicPopup.show({
+         title: '경고',
+         subTitle: '',
+         content: '작성중인 내용이 저장되지않았습니다.<br> 계속진행하시겠습니까?',
+         buttons: [
+           { text: 'No',
+            onTap: function(e){
+              
+            }
+           },
+           {
+             text: 'Yes',
+             type: 'button-positive',
+             onTap: function(e) {
+                  $ionicHistory.goBack();
+             }
+           },
+         ]
+        })
+     }
 
 })
 
@@ -23,6 +256,68 @@ $scope.andUrl = 'http://erpia.net';
 
 $scope.listSearch = ''; //상품명 검색
 $scope.listindex = 5; //더보기 5개씩
+
+ //환경설정 조회배열
+    $scope.configlist={
+      Admin_Code : 'onz',
+      UserId : 'pikapika',
+      Kind : 'ERPia_Meaip_Config',
+      Mode : 'select'
+    };
+    //매장코드로 창고리스트조회 배열
+    $scope.changolist={
+      Admin_Code : 'onz',
+      UserId : 'pikapika',
+      Kind : 'ERPia_Meaip_Select_Place_CName',
+      Mode : 'Select_CName',
+      Sale_Place_Code : 0
+    }
+
+//환경설정 조회
+    $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.configlist}).
+      success(function(data, status, headers, config) {
+        $scope.configlists = data.list;
+
+        for (var i = 0; i < $scope.configlists.length; i++) {
+          if($scope.configlists[i].UserId == $rootScope.userId){
+
+            //환경설정된 값을 다른 페이지에서 쓸수 있도록 전역변수에 옮겨 저장            
+            $scope.BasicConfiglist.basic_Ch_Code = $scope.configlists[i].basic_Ch_Code;
+            $scope.BasicConfiglist.basic_Place_Code = $scope.configlists[i].basic_Place_Code;
+            $scope.BasicConfiglist.basic_Dn_Meaip = $scope.configlists[i].basic_Dn_Meaip;
+
+             $scope.changolist.Sale_Place_Code = $scope.configlists[i].basic_Place_Code;
+                //기본창고 디폴트
+                $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.changolist}).
+                  success(function(data, status, headers, config) {
+                    $scope.changolists = data.list;
+                  }).
+                  error(function(data, status, headers, config) {
+
+                    var alertPopup = $ionicPopup.alert({
+
+                            title: 'Login failed!',
+
+                            template: 'Please check your credentials!'
+                  });
+                  });
+            break;
+          } else {
+                    
+          };
+
+        };
+
+      }).
+      error(function(data, status, headers, config) {
+
+        var alertPopup = $ionicPopup.alert({
+
+                title: 'failed!',
+
+                template: '다시시도해 주세요!!'
+      });
+      });
 
 
 /* 거래처검색 */
@@ -126,7 +421,6 @@ $scope.reqparams={
     $scope.searches=function(){
     $scope.reqparams.sdate = $scope.sedate.Sdate;
     $scope.reqparams.edate = $scope.sedate.Edate;
-    alert("?="+$scope.reqparams.edate);
 
        // CORS 요청 데모
     $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.reqparams}).
@@ -274,7 +568,7 @@ $scope.reqparams={
         if ($scope.chitdelists[0].rslt == "Y") {
           alert("매입전표가 삭제되었습니다.");
           $ionicHistory.goBack();
-          $scope.lists.refreshItems();
+          /*$scope.lists.refreshItems();*/
         }else{
           alert("삭제되지못했습니다.다시시도해주세요.");
         };
@@ -304,7 +598,13 @@ $scope.reqparams={
           Mejang_Code : 0 //매장코드
     };
 
-    $rootScope.G_Name='';
+    $rootScope.meaipKorea={
+      G_Name : '',  //거래처 한글
+      subulkorea : '',
+      changoKorea : '',
+      MejangKorea : ''
+    };
+
     $scope.G_Name2='';
 
     //매장조회 배열
@@ -322,13 +622,39 @@ $scope.reqparams={
        Mode : 'Select_CName',
        Sale_Place_Code : 0
    }
-
+alert($scope.BasicConfiglist.basic_Ch_Code);
 
     //기본매장 디폴트
     $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.storelist}).
       success(function(data, status, headers, config) {
-
         $scope.storelists = data.list;
+
+        for (var i = 0; i < $scope.storelists.length; i++) {
+          if ($scope.storelists[i].Sale_Place_Code == $scope.BasicConfiglist.basic_Place_Code) {
+            $scope.maipbasiclist.Mejang_Code = $scope.storelists[i].Sale_Place_Code + ',' + $scope.storelists[i].Sale_Place_Name;
+
+            $scope.changolist.Sale_Place_Code = $scope.storelists[i].Sale_Place_Code;
+                  $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.changolist}).
+                  success(function(data, status, headers, config) {
+
+                    $scope.changolists = data.list;
+                    for (var i = 0; i < $scope.changolists.length; i++) {
+                      if ($scope.changolists[i].Code == $scope.BasicConfiglist.basic_Ch_Code) {
+                        $scope.maipbasiclist.ChangGo_Code = $scope.changolists[i].Code + ',' + $scope.changolists[i].Name;
+                      };
+                    };
+                  }).
+                  error(function(data, status, headers, config) {
+
+                    var alertPopup = $ionicPopup.alert({
+
+                            title: 'Login failed!',
+
+                            template: 'Please check your credentials!'
+                  });
+                  });
+          };
+        };
       }).
       error(function(data, status, headers, config) {
 
@@ -342,7 +668,7 @@ $scope.reqparams={
 
 //거래처창고 조회후 값저장
     $scope.customerFunc=function(gname,gcode){
-      $scope.G_Name=gname;
+      $scope.meaipKorea.G_Name=gname;
       $scope.maipbasiclist.Comp_no=gcode;
       $scope.modalcustomer.hide();
     }
@@ -350,10 +676,15 @@ $scope.reqparams={
     $scope.kindF=function(kindcode){
 
       $scope.maipbasiclist.subul_kind = kindcode;
+      if (kindcode == 212) {
+        $scope.meaipKorea.subulkorea = "반품";
+      }else{
+        $scope.meaipKorea.subulkorea = "입고";
+      };
     }
+
 //창고매장조회
     $scope.Chango=function(){
-
       $scope.changolist.Sale_Place_Code = $scope.maipbasiclist.Mejang_Code;
       $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.changolist}).
       success(function(data, status, headers, config) {
@@ -615,13 +946,19 @@ $scope.andUrl = 'http://erpia.net';
 
     // 등록 Modal show
     $scope.goodsinsertF = function() {
+      /* 한글이름과 코드 분리 */
+      $scope.array = $scope.maipbasiclist.Mejang_Code + "," + $scope.maipbasiclist.ChangGo_Code;
+      alert($scope.array);
+      $scope.se = $scope.array.split(',');
+      $scope.maipbasiclist.Mejang_Code = $scope.se[0];
+      $scope.meaipKorea.MejangKorea = $scope.se[1];
+      $scope.maipbasiclist.ChangGo_Code = $scope.se[2];
+      $scope.meaipKorea.changoKorea = $scope.se[3];
+
+
+      $scope.maipbasiclist.ChangGo_Code
     $scope.modeInsert.show();
    
   };
-
-     $scope.ss=function(zz){
-      alert("안녕");
-      alert("ㅋㅋ" + zz);
-     }
 
 });
