@@ -51,7 +51,31 @@
     </tr>
   </table>
   <hr>
+     <table width="100%" style="text-align:center;">
+        <tr bgcolor="#EAEAEA">
+          <td width="45%">상품명</td>
+          <td width="10%">수 량</td>
+          <td width="45%">단 가</td>
+        </tr>
+        <tr>
+          <td colspan="3"><hr></td>
+        </tr>
+        <tr ng-repeat="y in addlists">
+          <td>{{y.namegoods}}</td>
+          <td>{{y.numgoods}} 개</td>
+          <td>{{y.gdngoods}}</td>
+        </tr>
+        <tr>
+            <td colspan="3"><hr></td>
+          </tr>
+          <tr>
+            <td colspan="3" align="right"><b>총 {{sumqty}}개 / {{pricesumGoods}}원</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          </tr>
+      </table>
   </div>
+  <ion-item ng-click="insertGoodsF()">
+      저장
+    </ion-item>
   </form>
   </ion-content>
   </ion-modal-view>
