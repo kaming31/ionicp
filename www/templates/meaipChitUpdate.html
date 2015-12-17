@@ -1,6 +1,12 @@
-<ion-view view-title="매입 전표">
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">매입전표 수정</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closemupdate()">Close</button>
+    </div>
+  </ion-header-bar>
   <ion-content>
-   <form>
+  <form>
    <div align="center"> 
    <any ng-repeat="x in meaipchitlists | filter: listSearch track by $index" ng-if="$index < 1">
       {{x.iL_No}}<hr>
@@ -95,4 +101,4 @@
 	 </div>
    </form> 
   </ion-content>
-</ion-view>
+</ion-modal-view>

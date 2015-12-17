@@ -3,7 +3,7 @@ angular.module('starter.controllers', ['ngCordova'])
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $http, $rootScope) {
 $scope.httpUrl = '/app';
 $scope.andUrl = 'http://erpia.net';
-$rootScope.userId = 'pikapika';
+$rootScope.userId = 'erli';
 
 //기본설정 저장배열
 $rootScope.BasicConfiglist = {
@@ -64,7 +64,7 @@ $scope.andUrl = 'http://erpia.net';
     ];
 
     //환경설정 조회
-    $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.configlist}).
+    $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.configlist}).
       success(function(data, status, headers, config) {
         $scope.configlists = data.list;
 
@@ -80,7 +80,7 @@ $scope.andUrl = 'http://erpia.net';
             $scope.BasicConfiglist.basic_Dn_Meaip = $scope.configlists[i].basic_Dn_Meaip;
 
                 //기본매장 디폴트
-              $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.storelist}).
+              $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.storelist}).
                 success(function(data, status, headers, config) {
 
                   $scope.storelists = data.list;
@@ -89,7 +89,7 @@ $scope.andUrl = 'http://erpia.net';
 
                   var alertPopup = $ionicPopup.alert({
 
-                          title: 'Login failed!',
+                          title: '기본매장디폴트에러',
 
                           template: 'Please check your credentials!'
                 });
@@ -97,7 +97,7 @@ $scope.andUrl = 'http://erpia.net';
 
             $scope.changolist.Sale_Place_Code = $scope.configlists[i].basic_Place_Code;
                 //기본창고 디폴트
-                $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.changolist}).
+                $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.changolist}).
                   success(function(data, status, headers, config) {
                     $scope.changolists = data.list;
                   }).
@@ -105,7 +105,7 @@ $scope.andUrl = 'http://erpia.net';
 
                     var alertPopup = $ionicPopup.alert({
 
-                            title: 'Login failed!',
+                            title: '기본창고디폴트',
 
                             template: 'Please check your credentials!'
                   });
@@ -120,7 +120,7 @@ $scope.andUrl = 'http://erpia.net';
 
         if ($scope.confinum == 1) {
             //기본매장 디폴트
-              $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.storelist}).
+              $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.storelist}).
                 success(function(data, status, headers, config) {
 
                   $scope.storelists = data.list;
@@ -129,7 +129,7 @@ $scope.andUrl = 'http://erpia.net';
 
                   var alertPopup = $ionicPopup.alert({
 
-                          title: 'Login failed!',
+                          title: '기본매장2',
 
                           template: 'Please check your credentials!'
                 });
@@ -150,7 +150,7 @@ $scope.andUrl = 'http://erpia.net';
       $scope.ChangoConfig=function(){
         $scope.changolist.Sale_Place_Code = $scope.BasicConfiglist.basic_Place_Code;
                 //기본창고 디폴트
-                $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.changolist}).
+                $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.changolist}).
                   success(function(data, status, headers, config) {
                     $scope.changolists = data.list;
                   }).
@@ -158,7 +158,7 @@ $scope.andUrl = 'http://erpia.net';
 
                     var alertPopup = $ionicPopup.alert({
 
-                            title: 'Login failed!',
+                            title: '기본창고 2',
 
                             template: 'Please check your credentials!'
                   });
@@ -183,7 +183,7 @@ $scope.andUrl = 'http://erpia.net';
         $scope.confisavelist.basic_Place_Code = $scope.BasicConfiglist.basic_Place_Code;
         $scope.confisavelist.basic_Dn_Meaip =  $scope.BasicConfiglist.basic_Dn_Meaip;
 
-        $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.confisavelist}).
+        $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.confisavelist}).
                   success(function(data, status, headers, config) {
                     $scope.changolists = data.list;
                     alert("저장되셨습니다.");
@@ -205,7 +205,7 @@ $scope.andUrl = 'http://erpia.net';
         $scope.confisavelist.basic_Place_Code = $scope.BasicConfiglist.basic_Place_Code;
         $scope.confisavelist.basic_Dn_Meaip =  $scope.BasicConfiglist.basic_Dn_Meaip;
 
-        $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.confisavelist}).
+        $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.confisavelist}).
                   success(function(data, status, headers, config) {
                     $scope.changolists = data.list;
                     alert("저장되셨습니다.");
@@ -275,7 +275,7 @@ $scope.listindex = 5; //더보기 5개씩
     }
 
 //환경설정 조회
-    $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.configlist}).
+    $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.configlist}).
       success(function(data, status, headers, config) {
         $scope.configlists = data.list;
 
@@ -289,7 +289,7 @@ $scope.listindex = 5; //더보기 5개씩
 
              $scope.changolist.Sale_Place_Code = $scope.configlists[i].basic_Place_Code;
                 //기본창고 디폴트
-                $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.changolist}).
+                $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.changolist}).
                   success(function(data, status, headers, config) {
                     $scope.changolists = data.list;
                   }).
@@ -297,7 +297,7 @@ $scope.listindex = 5; //더보기 5개씩
 
                     var alertPopup = $ionicPopup.alert({
 
-                            title: 'Login failed!',
+                            title: '환경설정 기본창고',
 
                             template: 'Please check your credentials!'
                   });
@@ -349,7 +349,7 @@ $ionicModal.fromTemplateUrl('templates/customer.html', {
 
  /* 거래처 검색 */
   $scope.cusSearch = function(){
-    $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.customerSearchlists}).
+    $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.customerSearchlists}).
       success(function(data, status, headers, config) {
 
         $scope.cuslists = data.list;
@@ -401,7 +401,7 @@ $scope.reqparams={
       eDate : $scope.todate
     };
     //금일 데이터 기본값으로 얻어오기
-    $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.reqparams}).
+    $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.reqparams}).
       success(function(data, status, headers, config) {
         $scope.lists = data.list;
       }).
@@ -409,22 +409,22 @@ $scope.reqparams={
 
         var alertPopup = $ionicPopup.alert({
 
-                title: 'Login failed!',
+                title: '금일',
 
                 template: 'Please check your credentials!'
       });
       });
 
-    $scope.sedate={
+/*    $scope.sedate={
       Sdate : '',
-      Edate : ''
-    };
+      Edate : '',
+      Sdate2 : '',
+      Edate2 : ''
+    };*/
     $scope.searches=function(){
-    $scope.reqparams.sdate = $scope.sedate.Sdate;
-    $scope.reqparams.edate = $scope.sedate.Edate;
 
        // CORS 요청 데모
-    $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.reqparams}).
+    $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.reqparams}).
       success(function(data, status, headers, config) {
 
         $scope.lists = data.list;
@@ -434,7 +434,7 @@ $scope.reqparams={
 
         var alertPopup = $ionicPopup.alert({
 
-                title: 'Login failed!',
+                title: '날짜',
 
                 template: 'Please check your credentials!'
 
@@ -446,7 +446,7 @@ $scope.reqparams={
       $scope.reqparams.sDate=$scope.dateMinus(0);
      $scope.reqparams.eDate=$scope.dateMinus(0);
        // CORS 요청 데모
-    $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.reqparams}).
+    $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.reqparams}).
       success(function(data, status, headers, config) {
 
         $scope.lists = data.list;
@@ -456,7 +456,7 @@ $scope.reqparams={
 
         var alertPopup = $ionicPopup.alert({
 
-                title: 'Login failed!',
+                title: '금일',
 
                 template: 'Please check your credentials!'
 
@@ -468,7 +468,7 @@ $scope.reqparams={
      $scope.reqparams.sDate=$scope.dateMinus(7);
      $scope.reqparams.eDate=$scope.dateMinus(0);
        // CORS 요청 데모
-    $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.reqparams}).
+    $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.reqparams}).
       success(function(data, status, headers, config) {
 
         $scope.lists = data.list;
@@ -492,7 +492,7 @@ $scope.reqparams={
      $scope.reqparams.sDate=$scope.dateMinus(30);
      $scope.reqparams.eDate=$scope.dateMinus(0);
        // CORS 요청 데모
-    $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.reqparams}).
+    $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.reqparams}).
       success(function(data, status, headers, config) {
 
         $scope.lists = data.list;
@@ -527,7 +527,7 @@ $scope.reqparams={
       //매입전표조회 function
      $scope.meaipChitF=function(ilno){
       $scope.meaipChitList.IL_No = ilno;
-      $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.meaipChitList}).
+      $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.meaipChitList}).
         success(function(data, status, headers, config) {
 
         $rootScope.meaipchitlists = data.list;
@@ -544,7 +544,7 @@ $scope.reqparams={
 
         var alertPopup = $ionicPopup.alert({
 
-                title: 'Login failed!',
+                title: '매입전표조회',
 
                 template: 'Please check your credentials!'
       });
@@ -562,30 +562,49 @@ $scope.reqparams={
 
     $scope.chitDeleteF=function(ilno){
       $scope.chitdeletelist.IL_No = ilno;
-      $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.chitdeletelist}).
-      success(function(data, status, headers, config) {
 
-        $scope.chitdelists = data.list;
-        if ($scope.chitdelists[0].rslt == "Y") {
-          alert("매입전표가 삭제되었습니다.");
-          $ionicHistory.goBack();
-          /*$scope.lists.refreshItems();*/
-        }else{
-          alert("삭제되지못했습니다.다시시도해주세요.");
-        };
-/*        $state.go('app.search');*/
-      }).
-      error(function(data, status, headers, config) {
+      $ionicPopup.show({
+         title: '경고',
+         subTitle: '',
+         content: '매입전표를 삭제합니다.<br> 진행하시겠습니까?',
+         buttons: [
+           { text: 'No',
+            onTap: function(e){
+              
+            }
+           },
+           {
+             text: 'Yes',
+             type: 'button-positive',
+             onTap: function(e) {
 
-        var alertPopup = $ionicPopup.alert({
+                  $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.chitdeletelist}).
+                      success(function(data, status, headers, config) {
 
-                title: 'failed!',
+                        $scope.chitdelists = data.list;
+                        if ($scope.chitdelists[0].rslt == "Y") {
+                          alert("매입전표가 삭제되었습니다.");
+                          $ionicHistory.goBack();
+                          /*$scope.lists.refreshItems();*/
+                        }else{
+                          alert("삭제되지못했습니다.다시시도해주세요.");
+                        };
+                /*        $state.go('app.search');*/
+                      }).
+                      error(function(data, status, headers, config) {
 
-                template: 'Please check your credentials!'
+                        var alertPopup = $ionicPopup.alert({
 
-      });
-      });
+                                title: 'failed!',
 
+                                template: 'Please check your credentials!'
+
+                      });
+                      });
+             }
+           },
+         ]
+        })
      }
 
     /*매입 등록 기본사항-----------------------------*/
@@ -625,34 +644,33 @@ $scope.reqparams={
    }
 
     //기본매장 디폴트
-    $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.storelist}).
+    $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.storelist}).
       success(function(data, status, headers, config) {
         $scope.storelists = data.list;
-
         for (var i = 0; i < $scope.storelists.length; i++) {
           if ($scope.storelists[i].Sale_Place_Code == $scope.BasicConfiglist.basic_Place_Code) {
             $scope.maipbasiclist.Mejang_Code = $scope.storelists[i].Sale_Place_Code + ',' + $scope.storelists[i].Sale_Place_Name;
-
             $scope.changolist.Sale_Place_Code = $scope.storelists[i].Sale_Place_Code;
-                  $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.changolist}).
-                  success(function(data, status, headers, config) {
+                    $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.changolist}).
+                    success(function(data, status, headers, config) {
 
-                    $scope.changolists = data.list;
-                    for (var i = 0; i < $scope.changolists.length; i++) {
-                      if ($scope.changolists[i].Code == $scope.BasicConfiglist.basic_Ch_Code) {
-                        $scope.maipbasiclist.ChangGo_Code = $scope.changolists[i].Code + ',' + $scope.changolists[i].Name;
+                      $scope.changolists = data.list;
+                      for (var i = 0; i < $scope.changolists.length; i++) {
+                        if ($scope.changolists[i].Code == $scope.BasicConfiglist.basic_Ch_Code) {
+                          $scope.maipbasiclist.ChangGo_Code = $scope.changolists[i].Code + ',' + $scope.changolists[i].Name;
+                        };
                       };
-                    };
-                  }).
-                  error(function(data, status, headers, config) {
+                    }).
+                    error(function(data, status, headers, config) {
 
-                    var alertPopup = $ionicPopup.alert({
+                      var alertPopup = $ionicPopup.alert({
 
-                            title: 'Login failed!',
+                              title: '기본매장디폴트 매입',
 
-                            template: 'Please check your credentials!'
-                  });
-                  });
+                              template: 'Please check your credentials!'
+                    });
+                    });
+                    break;
           };
         };
       }).
@@ -686,7 +704,7 @@ $scope.reqparams={
 //창고매장조회
     $scope.Chango=function(){
       $scope.changolist.Sale_Place_Code = $scope.maipbasiclist.Mejang_Code;
-      $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.changolist}).
+      $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.changolist}).
       success(function(data, status, headers, config) {
 
         $scope.changolists = data.list;
@@ -725,6 +743,25 @@ $scope.reqparams={
          ]
         })
      }
+
+     //매입전표 수정 Modal
+    $ionicModal.fromTemplateUrl('templates/meaipChitUpdate.html', {
+    scope: $scope
+    }).then(function(modal) {
+    $scope.mupdatemodal = modal;
+    });
+
+    // 수정창 닫기
+    $scope.closemupdate = function() {
+    $scope.mupdatemodal.hide();
+    };
+
+    // 수정창 보여주기
+    $scope.chitUpdateF = function(Meaipinfo) {
+      
+    $scope.mupdatemodal.show();
+   
+  };
         
 
 })
@@ -925,8 +962,8 @@ $scope.andUrl = 'http://erpia.net';
       $scope.checkd = $scope.modedivition.mode;
 
       if ($scope.checkval == "상품명조회") {
-        $scope.GoodsNamelist.GoodsName = $scope.modedivition.seaname;
-        $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.GoodsNamelist}).
+        $scope.GoodsNamelist.GoodsName = escape($scope.modedivition.seaname);
+        $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.GoodsNamelist}).
       success(function(data, status, headers, config) {
 
         $scope.goodslists = data.list;
@@ -943,7 +980,7 @@ $scope.andUrl = 'http://erpia.net';
 
       }else if ($scope.checkval == "상품코드조회") { 
         $scope.goodscodelist.GoodsCode = $scope.modedivition.seaname;
-        $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.goodscodelist}).
+        $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.goodscodelist}).
       success(function(data, status, headers, config) {
 
         $scope.goodslists = data.list;
@@ -960,17 +997,20 @@ $scope.andUrl = 'http://erpia.net';
 
       }else{
         $scope.G_OnCodelist.G_OnCode = $scope.modedivition.seaname;
-        $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.G_OnCodelist}).
+        $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.G_OnCodelist}).
       success(function(data, status, headers, config) {
 
         $scope.goodslists = data.list;
+        if ($scope.goodslists.length == 0) {
+          alert("해당결과가 없습니다.");
+        };
        
       }).
       error(function(data, status, headers, config) {
 
         var alertPopup = $ionicPopup.alert({
 
-                title: 'Login failed!',
+                title: '자체코드!',
 
                 template: 'Please check your credentials!'
       });
@@ -1046,18 +1086,18 @@ $scope.andUrl = 'http://erpia.net';
        RequestXml : ''
    };
 
-  
+  /* 매입 등록! */
   $scope.insertGoodsF = function() {
     $scope.meaipm = '<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>'+$scope.maipbasiclist.maip_date+'</Meaip_Date><GuMeaCom_Code>'+$scope.maipbasiclist.Comp_no+'</GuMeaCom_Code><Meaip_Amt>'+$scope.pricesumGoods+'</Meaip_Amt><Sale_Place>'+$scope.maipbasiclist.Mejang_Code+'</Sale_Place><Remk><![CDATA[aa]]></Remk></MeaipM><MeaipT>'
     $scope.meaipt = '';
     $scope.meaipend = '</MeaipT></root>';
     for (var i = 0; i < $scope.addlists.length; i++) {
       var j = i+1; // seq
-      $scope.meaipt = $scope.meaipt+'<item><seq>'+j+'</seq><ChangGo_Code>'+$scope.maipbasiclist.ChangGo_Code+'</ChangGo_Code><subul_kind>'+$scope.maipbasiclist.subul_kind+'</subul_kind><G_Code>'+$scope.addlists[i].codegoods+'</G_Code><G_name><![CDATA['+$scope.addlists[i].namegoods+']]></G_name><G_stand><![CDATA['+$scope.addlists[i].standgoods+']]></G_stand><G_Price>'+$scope.addlists[i].gdngoods+'</G_Price><G_Qty>'+$scope.addlists[i].numgoods+'</G_Qty><G_vat>'+1800+'</G_vat></item>';
+      $scope.meaipt = $scope.meaipt+'<item><seq>'+j+'</seq><ChangGo_Code>'+$scope.maipbasiclist.ChangGo_Code+'</ChangGo_Code><subul_kind>'+$scope.maipbasiclist.subul_kind+'</subul_kind><G_Code>'+$scope.addlists[i].codegoods+'</G_Code><G_name><![CDATA['+escape($scope.addlists[i].namegoods)+']]></G_name><G_stand><![CDATA['+escape($scope.addlists[i].standgoods)+']]></G_stand><G_Price>'+$scope.addlists[i].gdngoods+'</G_Price><G_Qty>'+$scope.addlists[i].numgoods+'</G_Qty><G_vat>'+1800+'</G_vat></item>';
     };
     $scope.meaipinsertlists.RequestXml = $scope.meaipm+$scope.meaipt+$scope.meaipend;
 
-      $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.meaipinsertlists}).
+      $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.meaipinsertlists}).
         success(function(data, status, headers, config) {
 
           alert("success문안");
@@ -1075,5 +1115,7 @@ $scope.andUrl = 'http://erpia.net';
 
 
   }
+
+
 
 });

@@ -19,20 +19,17 @@
 					<br>
 	   			</td>
 	   		</tr>
-	   		<tr>
+	   		<tr width="100%">
 	   			<td align="center">일자</td>
 	   			<td>
-	   				<input type="date" ng-model="sedate.Sdate" size="11" style="border:1px solid #eee;">
-	   				<br>
-	   			</td>
-	   			<td>
-	   				~
-	   			</td>
-	   			<td>
-	   				<input type="date" ng-model="sedate.Edate" size="11" style="border:1px solid #eee;">
-	   			</td>
-	   			<td align="center">
-	   				<button ng-click='searches()'>검색</button>
+					  <input type="text"  ng-model="reqparams.sDate" size="11" style="border:1px solid #eee;">
+				</td>
+				<td>~</td>
+				<td>
+					  <input type="text"  ng-model="reqparams.eDate" size="11" style="border:1px solid #eee;">
+				</td>
+				<td>
+	   				<button ng-click="searches()">검색</button>
 	   			</td>
 	   		</tr>
 	    </table>
@@ -41,7 +38,6 @@
 	    <button style="width:20%" ng-click="searches30day()">1개월</button>
 	    </div>
 	    <hr>
-
 	   	</div>
 	   	<div align="center">
 	   		조회목록
