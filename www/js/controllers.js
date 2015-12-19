@@ -694,7 +694,7 @@ $scope.reqparams={
     $scope.kindF=function(kindcode){
 
       $scope.maipbasiclist.subul_kind = kindcode;
-      if (kindcode == 212) {
+      if (kindcode == 122) {
         $scope.meaipKorea.subulkorea = "반품";
       }else{
         $scope.meaipKorea.subulkorea = "입고";
@@ -1024,7 +1024,6 @@ $scope.andUrl = 'http://erpia.net';
     $scope.addlists = [];
 
      $scope.listadd=function(name,gdn,code,stand){
-      alert("배열에 코드와 스탠드 => "+code+ "/" + stand);
      $scope.addlists.push({
          namegoods : name, //상품명
          gdngoods : gdn, // 단가
@@ -1088,6 +1087,7 @@ $scope.andUrl = 'http://erpia.net';
 
   /* 매입 등록! */
   $scope.insertGoodsF = function() {
+
     $scope.meaipm = '<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>'+$scope.maipbasiclist.maip_date+'</Meaip_Date><GuMeaCom_Code>'+$scope.maipbasiclist.Comp_no+'</GuMeaCom_Code><Meaip_Amt>'+$scope.pricesumGoods+'</Meaip_Amt><Sale_Place>'+$scope.maipbasiclist.Mejang_Code+'</Sale_Place><Remk><![CDATA[aa]]></Remk></MeaipM><MeaipT>'
     $scope.meaipt = '';
     $scope.meaipend = '</MeaipT></root>';
