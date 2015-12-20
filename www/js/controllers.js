@@ -343,7 +343,8 @@ $ionicModal.fromTemplateUrl('templates/customer.html', {
   };
 
  /* 거래처검색창 보여주기 */
-  $scope.customer = function() {
+  $scope.customer = function(num) {
+    $rootScope.cusSearchnum = num;
     $scope.modalcustomer.show();
   };
 
@@ -615,7 +616,8 @@ $scope.reqparams={
           Comp_no : '',
           subul_kind : 0, //수불구분
           ChangGo_Code : 0, //창고코드
-          Mejang_Code : 0 //매장코드
+          Mejang_Code : 0, //매장코드
+          remk : ''
     };
 
     $rootScope.meaipKorea={
@@ -686,8 +688,13 @@ $scope.reqparams={
 
 //거래처창고 조회후 값저장
     $scope.customerFunc=function(gname,gcode){
-      $scope.meaipKorea.G_Name=gname;
-      $scope.maipbasiclist.Comp_no=gcode;
+      if ($scope.cusSearchnum == 1) {
+        $scope.meaipchitlists[0].GerName=gname;
+        $scope.maipbasiclist.Comp_no=gcode;
+      }else{
+        $scope.meaipKorea.G_Name=gname;
+        $scope.maipbasiclist.Comp_no=gcode;
+      };
       $scope.modalcustomer.hide();
     }
 //수불구분
@@ -758,10 +765,135 @@ $scope.reqparams={
 
     // 수정창 보여주기
     $scope.chitUpdateF = function(Meaipinfo) {
-      
+
+    $scope.ge = Meaipinfo[0].GerName.split('(');
+
+    if ($scope.ge.length == 3) {
+      $scope.ge2 = $scope.ge[2].split(')');
+      $scope.maipbasiclist.Comp_no = $scope.ge2[0];
+    }else{
+      $scope.ge2 = $scope.ge[1].split(')');
+      $scope.maipbasiclist.Comp_no = $scope.ge2[0];
+    };
+
+    if (Meaipinfo[0].Subul_kind == '매입입고') {
+      $scope.subul = 111;
+    }else{
+      $scope.subul = 122;
+    };
+    //매장코드값얻기
+      $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.storelist}).
+        success(function(data, status, headers, config) {
+
+          $scope.storelists = data.list;
+          for (var i = 0; i < $scope.storelists.length; i++) {
+            if($scope.storelists[i].Sale_Place_Name == Meaipinfo[0].Sale_Place_Name){
+                $scope.listpp.mejangcodenum = $scope.storelists[i].Sale_Place_Code;
+
+                     $scope.changolist.Sale_Place_Code = $scope.listpp.mejangcodenum;
+                      //기본창고 디폴트
+                      $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.changolist}).
+                        success(function(data, status, headers, config) {
+                          $scope.changolists = data.list;
+                          for (var i = 0; i < $scope.changolists.length; i++) {
+                            if ($scope.changolists[i].Name == Meaipinfo[0].CName) {
+                              alert("같음." + $scope.changolists[i].Name + $scope.changolists[i].Code);
+                              $scope.listpp.changocodenum = $scope.changolists[i].Code;
+
+                            };
+                          }
+                        }).
+                        error(function(data, status, headers, config) {
+
+                          var alertPopup = $ionicPopup.alert({
+
+                                  title: '기본창고디폴트',
+
+                                  template: 'Please check your credentials!'
+                        });
+                        });
+
+                break;
+            };
+
+
+          };
+        }).
+        error(function(data, status, headers, config) {
+
+          var alertPopup = $ionicPopup.alert({
+
+                  title: '기본매장디폴트에러',
+
+                  template: 'Please check your credentials!'
+        });
+      });
+
     $scope.mupdatemodal.show();
    
   };
+
+  $scope.kindup=[
+  {Subul_kindnum : 111, Subul_kind : '매입입고'},
+  {Subul_kindnum : 122, Subul_kind : '매입반품'},
+  ];
+
+  /* 등록 배열 */
+  $scope.meaipinsertlists={
+       Admin_Code : 'onz',
+       UserId : 'pikapika',
+       Kind : 'ERPia_Meaip_Update_Goods',
+       Mode : 'Update_Meaip',
+       RequestXml : ''
+   };
+  $scope.ss=function(ss) {
+    alert("안녕");
+    alert(ss[0].Meaip_Date);
+    alert(ss[0].Subul_kind);
+    alert("거래처=>" + $scope.maipbasiclist.Comp_no);
+    alert("매장코드=>" + $scope.listpp.mejangcodenum);
+    alert("창고코드 =>" + $scope.listpp.changocodenum);
+    alert("상품개수 ->" + ss.length);
+    alert("상품상세개수 =>" + ss[0].G_Qty);
+
+    $scope.meaipm = '<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>'+$scope.maipbasiclist.maip_date+'</Meaip_Date><GuMeaCom_Code>'+$scope.maipbasiclist.Comp_no+'</GuMeaCom_Code><Meaip_Amt>'+$scope.pricesumGoods+'</Meaip_Amt><Sale_Place>'+$scope.maipbasiclist.Mejang_Code+'</Sale_Place><Remk><![CDATA['+$scope.maipbasiclist.remk2+']]></Remk></MeaipM><MeaipT>'
+    $scope.meaipt = '';
+    $scope.meaipend = '</MeaipT></root>';
+    for (var i = 0; i < $scope.addlists.length; i++) {
+      var j = i+1; // seq
+      $scope.addlists[i].namegoods2 = escape($scope.addlists[i].namegoods);
+      $scope.meaipt = $scope.meaipt+'<item><seq>'+j+'</seq><ChangGo_Code>'+$scope.maipbasiclist.ChangGo_Code+'</ChangGo_Code><subul_kind>'+$scope.maipbasiclist.subul_kind+'</subul_kind><G_Code>'+$scope.addlists[i].codegoods+'</G_Code><G_name><![CDATA['+$scope.addlists[i].namegoods2+']]></G_name><G_stand><![CDATA['+escape($scope.addlists[i].standgoods)+']]></G_stand><G_Price>'+$scope.addlists[i].gdngoods+'</G_Price><G_Qty>'+$scope.addlists[i].numgoods+'</G_Qty><G_vat>'+1800+'</G_vat></item>';
+    };
+    $scope.meaipinsertlists.RequestXml = $scope.meaipm+$scope.meaipt+$scope.meaipend;
+    console.log($scope.meaipinsertlists.RequestXml);
+
+      $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.meaipinsertlists}).
+        success(function(data, status, headers, config) {
+
+          alert("success문안");
+        }).
+        error(function(data, status, headers, config) {
+
+          var alertPopup = $ionicPopup.alert({
+
+                  title: '등록완료!',
+
+                  template: '매입이 완료되었습니다.!'
+
+        });
+        });
+
+  }
+  //매장&창고 코드
+  $scope.listpp = {
+    mejangcodenum : 0,
+    changocodenum : 0
+  };
+
+     /* 해당 리스트항목 삭제 */
+   $scope.goodsDe=function(index){
+      $scope.meaipchitlists.splice(index,1);
+   }
         
 
 })
@@ -1088,14 +1220,18 @@ $scope.andUrl = 'http://erpia.net';
   /* 매입 등록! */
   $scope.insertGoodsF = function() {
 
-    $scope.meaipm = '<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>'+$scope.maipbasiclist.maip_date+'</Meaip_Date><GuMeaCom_Code>'+$scope.maipbasiclist.Comp_no+'</GuMeaCom_Code><Meaip_Amt>'+$scope.pricesumGoods+'</Meaip_Amt><Sale_Place>'+$scope.maipbasiclist.Mejang_Code+'</Sale_Place><Remk><![CDATA[aa]]></Remk></MeaipM><MeaipT>'
+    $scope.maipbasiclist.remk2 = escape($scope.maipbasiclist.remk);
+
+    $scope.meaipm = '<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>'+$scope.maipbasiclist.maip_date+'</Meaip_Date><GuMeaCom_Code>'+$scope.maipbasiclist.Comp_no+'</GuMeaCom_Code><Meaip_Amt>'+$scope.pricesumGoods+'</Meaip_Amt><Sale_Place>'+$scope.maipbasiclist.Mejang_Code+'</Sale_Place><Remk><![CDATA['+$scope.maipbasiclist.remk2+']]></Remk></MeaipM><MeaipT>'
     $scope.meaipt = '';
     $scope.meaipend = '</MeaipT></root>';
     for (var i = 0; i < $scope.addlists.length; i++) {
       var j = i+1; // seq
-      $scope.meaipt = $scope.meaipt+'<item><seq>'+j+'</seq><ChangGo_Code>'+$scope.maipbasiclist.ChangGo_Code+'</ChangGo_Code><subul_kind>'+$scope.maipbasiclist.subul_kind+'</subul_kind><G_Code>'+$scope.addlists[i].codegoods+'</G_Code><G_name><![CDATA['+escape($scope.addlists[i].namegoods)+']]></G_name><G_stand><![CDATA['+escape($scope.addlists[i].standgoods)+']]></G_stand><G_Price>'+$scope.addlists[i].gdngoods+'</G_Price><G_Qty>'+$scope.addlists[i].numgoods+'</G_Qty><G_vat>'+1800+'</G_vat></item>';
+      $scope.addlists[i].namegoods2 = escape($scope.addlists[i].namegoods);
+      $scope.meaipt = $scope.meaipt+'<item><seq>'+j+'</seq><ChangGo_Code>'+$scope.maipbasiclist.ChangGo_Code+'</ChangGo_Code><subul_kind>'+$scope.maipbasiclist.subul_kind+'</subul_kind><G_Code>'+$scope.addlists[i].codegoods+'</G_Code><G_name><![CDATA['+$scope.addlists[i].namegoods2+']]></G_name><G_stand><![CDATA['+escape($scope.addlists[i].standgoods)+']]></G_stand><G_Price>'+$scope.addlists[i].gdngoods+'</G_Price><G_Qty>'+$scope.addlists[i].numgoods+'</G_Qty><G_vat>'+1800+'</G_vat></item>';
     };
     $scope.meaipinsertlists.RequestXml = $scope.meaipm+$scope.meaipt+$scope.meaipend;
+    console.log($scope.meaipinsertlists.RequestXml);
 
       $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.meaipinsertlists}).
         success(function(data, status, headers, config) {

@@ -8,101 +8,69 @@
   <ion-content>
   <form>
    <div align="center"> 
-   <any ng-repeat="x in meaipchitlists | filter: listSearch track by $index" ng-if="$index < 1">
-      {{x.iL_No}}<hr>
-      <table>
-        <tr width="100%">
-          <td width="5%">&nbsp;</td>
-          <td width="35%" align="left">
-            <i class="ion-record">&nbsp;&nbsp;일 자</i>
-          </td>
-          <td width="60%" align="center">
-            {{x.Meaip_Date}}
-          </td>
-        </tr>
-        <tr>
-          <td width="5%">&nbsp;</td>
-          <td width="35%" align="left">
-            <i class="ion-record">&nbsp;&nbsp;구 분</i>
-          </td>
-          <td width="60%" align="center">
-            {{x.Subul_kind}}
-          </td>
-        </tr>
-        <tr width="35%" align="left">
-          <td width="5%">&nbsp;</td>
-          <td>
-            <i class="ion-record">&nbsp;&nbsp;거래처</i>
-          </td>
-          <td width="60%" align="center">
-            {{x.GerName}}
-          </td>
-        </tr>
-        <tr>
-          <td width="5%">&nbsp;</td>
-          <td width="35%" align="left">
-            <i class="ion-record">&nbsp;&nbsp;창고지정</i>
-          </td>
-          <td width="60%" align="center">
-            {{x.CName}}
-          </td>
-        </tr>
-        <tr>
-          <td width="5%">&nbsp;</td>
-          <td width="35%" align="left">
-            <i class="ion-record">&nbsp;&nbsp;매장지정</i>
-          </td>
-          <td width="60%" align="center">
-            {{x.Sale_Place_Name}}
-          </td>
-        </tr>
-      </table>
+   기본 입력사항<hr>
+  </div>
+      <div align="center">
+    <any ng-repeat="x in meaipchitlists | filter: listSearch track by $index" ng-if="$index < 1">
+
+        <label class="item item-input" style="border:0;">
+          <i class="ion-record">&nbsp;&nbsp;매입일&nbsp;</i>
+          <input type="text" style="text-align:center;" ng-model="x.Meaip_Date">
+        </label>
+
+        <label class="item item-input item-select" style="border:0;">
+          <i class="ion-record">&nbsp;&nbsp;수불구분&nbsp;</i>
+          <select ng-model="x.Subul_kind">
+               <option ng-repeat="i in kindup" value="{{i.Subul_kindnum}}" ng-selected="{{i.Subul_kindnum}} == subul">{{i.Subul_kind}}</option>
+          </select>
+        </label>
+
+        <div class="item item-input" style="border:0;">
+          <i class="ion-record">&nbsp;&nbsp;거래처&nbsp;</i>
+          <input type="text" ng-model="x.GerName" style="text-align:center;">
+          <button class="button button-stable" ng-click="customer(1)" size="10">검색</button>&nbsp;
+        </div>
+
+        <label class="item item-input item-select" style="border:0;">
+          <i class="ion-record">&nbsp;&nbsp;매장지정</i>
+          <select ng-model="listpp.mejangcodenum">
+             <option ng-repeat="y in storelists" value="{{y.Sale_Place_Code}}" ng-selected="y.Sale_Place_Code == listpp.mejangcodenum">{{y.Sale_Place_Name}}</option>
+          </select>
+        </label>
+
+        <label class="item item-input item-select" style="border:0;">
+          <i class="ion-record">&nbsp;&nbsp;창고지정</i>
+          <select ng-model="listpp.changocodenum">
+               <option ng-repeat="c in changolists" value="{{c.Code}}" ng-selected="c.Code == listpp.changocodenum">{{c.Name}}</option>
+          </select>
+        </label>
+       </any>
+      </div>
       <hr>
-   </any>
-         <table width="100%">
-          <tr width="100%">
-            <td width="40%" align="center">상품명</td>
-            <td width="20%" align="center">수량</td>
-            <td width="40%" align="center">단가</td>
+         <table width="100%" style="text-align:center;">
+          <tr bgcolor="#EAEAEA">
+            <td width="40%">상품명</td>
+            <td width="10%">수 량</td>
+            <td width="40%">단 가</td>
+            <td width="10%">&nbsp;</td>
           </tr>
           <tr>
-            <td colspan="3"><hr></td>
+            <td colspan="4"><hr></td>
           </tr>
           <tr ng-repeat="y in meaipchitlists">
-            <td width="40%" align="center">
-              {{y.G_Name}}
-            </td>
-            <td width="20%" align="center">
-              {{y.G_Qty}}
-            </td>
-            <td width="40%" align="center">
-              {{y.G_Price}}
-            </td>
+            <td>{{y.G_Name}}</td>
+            <td><input type="number" min="1" max="999" value="{{y.G_Qty}}" ng-model="y.G_Qty"></td>
+            <td>{{y.G_Price}}</td>
+            <td><i class="ion-android-remove-circle" ng-click="goodsDe($index)"></i>&nbsp;</td>
           </tr>
           <tr>
-            <td colspan="3"><hr></td>
+            <td colspan="4"><hr></td>
           </tr>
           <tr>
-            <td colspan="3" align="right"><b>총 {{qtysum}}개 / {{pricesum}}원</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td colspan="4" align="right"><b>총 {{qtysum}}개 / {{pricesum}}원</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
           </tr>
         </table><br><br>
-        <table width="80%">
-          <tr>
-            <td width="30%" align="center">
-            <any ng-repeat="x in meaipchitlists | filter: listSearch track by $index" ng-if="$index < 1">
-              <a ng-click="chitDeleteF(x.iL_No)"><button>삭제</button></a>
-              </any>
-            </td>
-            <td width="30%" align="center">
-            <any ng-repeat="x in meaipchitlists | filter: listSearch track by $index" ng-if="$index < 1">
-              <a ng-click="chitUpdateF(meaipchitlists)"><button>수정</button></a>
-              </any>
-            </td>
-            <td width="40%" align="center">
-              <button>거래명세서</button>
-            </td>
-          </tr>
-        </table>
+<button ng-click="ss(meaipchitlists)">저장</button>
 	 </div>
    </form> 
   </ion-content>
