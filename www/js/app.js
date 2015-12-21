@@ -94,7 +94,7 @@ var exampleApp = angular.module('starter', ['ionic', 'starter.controllers', 'ngC
       views: {
         'menuContent': {
           templateUrl: 'templates/meaipChit.html',
-          controller: 'MaipSearchCtrl'
+          controller: 'MaippartsCtrl'
         }
       }
     });

@@ -516,16 +516,10 @@ $scope.reqparams={
 
       });
       });
-      //매출전표조회 배열
-      $scope.meaipChitList={
-        Admin_Code : 'onz',
-        UserId : 'pikapika',
-        Kind : 'ERPia_Meaip_Select_Detail',
-        Mode : '',
-        IL_No : ''
-      };
 
-      //매입전표조회 function
+    }
+
+    //매입전표조회 function
      $scope.meaipChitF=function(ilno){
       $scope.meaipChitList.IL_No = ilno;
       $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.meaipChitList}).
@@ -551,7 +545,6 @@ $scope.reqparams={
       });
       });
      }
-    }
     //매입삭제배열
     $scope.chitdeletelist={
         Admin_Code : 'onz',
@@ -894,7 +887,7 @@ $scope.reqparams={
    $scope.goodsDe=function(index){
       $scope.meaipchitlists.splice(index,1);
    }
-        
+   
 
 })
 
@@ -1067,6 +1060,7 @@ $scope.andUrl = 'http://erpia.net';
 
     // 검색창 보여주기
     $scope.modesear = function(divimode) {
+      $scope.modevv = 123123;
       $scope.modedivition.seaname='';
       $scope.goodslists='';
       if (divimode == "Select_GoodsName") {
@@ -1221,6 +1215,7 @@ $scope.andUrl = 'http://erpia.net';
   $scope.insertGoodsF = function() {
 
     $scope.maipbasiclist.remk2 = escape($scope.maipbasiclist.remk);
+    alert("관리 =>" + $scope.maipbasiclist.remk2);
 
     $scope.meaipm = '<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>'+$scope.maipbasiclist.maip_date+'</Meaip_Date><GuMeaCom_Code>'+$scope.maipbasiclist.Comp_no+'</GuMeaCom_Code><Meaip_Amt>'+$scope.pricesumGoods+'</Meaip_Amt><Sale_Place>'+$scope.maipbasiclist.Mejang_Code+'</Sale_Place><Remk><![CDATA['+$scope.maipbasiclist.remk2+']]></Remk></MeaipM><MeaipT>'
     $scope.meaipt = '';
@@ -1232,6 +1227,7 @@ $scope.andUrl = 'http://erpia.net';
     };
     $scope.meaipinsertlists.RequestXml = $scope.meaipm+$scope.meaipt+$scope.meaipend;
     console.log($scope.meaipinsertlists.RequestXml);
+    alert($scope.meaipinsertlists.RequestXml);
 
       $http.get($scope.httpUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.meaipinsertlists}).
         success(function(data, status, headers, config) {

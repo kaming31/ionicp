@@ -44,7 +44,7 @@
 	   	</div>
 	   	<hr>
 	   	<any ng-repeat="x in lists | filter: listSearch track by $index" ng-if="$index < listindex">
-	   	<a ng-click="meaipChitF(x.iL_No)">
+	   	<a ng-controller="MaippartsCtrl" ng-click="meaipChitF(x.iL_No)">
 	<table>
 	   	<tr>
 		   	<td width="20%" align="center">품명</td>
