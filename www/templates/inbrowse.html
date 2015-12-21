@@ -22,11 +22,11 @@
 	   		<tr width="100%">
 	   			<td align="center">일자</td>
 	   			<td>
-					  <input type="text"  ng-model="reqparams.sDate" size="11" style="border:1px solid #eee;">
+					  <input type="text"  ng-model="reqparams.sDate" name="datepicker" ng-click="opendateModal(1)" readonly size="11" style="border:1px solid #eee;">
 				</td>
 				<td>~</td>
 				<td>
-					  <input type="text"  ng-model="reqparams.eDate" size="11" style="border:1px solid #eee;">
+					  <input type="text" ng-model="reqparams.eDate" name="datepicker" ng-click="opendateModal(2)" readonly  size="11" style="border:1px solid #eee;">
 				</td>
 				<td>
 	   				<button ng-click="searches()">검색</button>
@@ -44,7 +44,7 @@
 	   	</div>
 	   	<hr>
 	   	<any ng-repeat="x in lists | filter: listSearch track by $index" ng-if="$index < listindex">
-	   	<a ng-controller="MaippartsCtrl" ng-click="meaipChitF(x.iL_No)">
+	   	<a ng-click="meaipChitF(x.iL_No)">
 	<table>
 	   	<tr>
 		   	<td width="20%" align="center">품명</td>

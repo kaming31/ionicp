@@ -52,16 +52,16 @@
       <table>
         <tr>
           <td>&nbsp;
-              <select ng-model="modedivition.mode" ng-change='modesear()'>
+              <select ng-model="modedivition.mode" ng-change="modesear('',2)">
                 <option value="Select_G_OnCode">자체코드</option>
                 <option value="Select_G_Code">상품코드</option>
               </select>&nbsp;&nbsp;
           </td>
           <td>
-              <input type="text" placeholder="상품명을 입력하세요" size="33" ng-model="search.gName">
+              <input type="text" placeholder="상품명을 입력하세요" size="20" ng-model="search.gName">
           </td>
-          <td><i class="ion-search" style="font-size:30px" ng-click="modesear('Select_GoodsName')"></i></td>
-          <td><i class="ion-ios-barcode" style="font-size:30px"></i></td>
+          <td><i class="ion-search" style="font-size:30px" ng-click="modesear('Select_GoodsName',2)"></i></td>
+          <td><i class="ion-ios-barcode" style="font-size:30px" ng-click="scanBarcode(2)"></i></td>
           </tr>
         </table>
        </ion>
@@ -89,7 +89,9 @@
             <td colspan="4" align="right"><b>총 {{qtysum}}개 / {{pricesum}}원</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
           </tr>
         </table><br><br>
-<button ng-click="ss(meaipchitlists)">저장</button>
+    <ion-item ng-click="ss(meaipchitlists)">
+      저장
+    </ion-item>
 	 </div>
    </form> 
   </ion-content>

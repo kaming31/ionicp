@@ -6,17 +6,17 @@
 	 <div class="button-bar" style="align:center;">
     &nbsp;&nbsp;
 
-    <select style="width:30%" ng-model="modedivition.mode" ng-change='modesear()'>
+    <select style="width:30%" ng-model="modedivition.mode" ng-change="modesear('',1)">
       <option value="Select_G_OnCode">자체코드</option>
       <option value="Select_G_Code">상품코드</option>
     </select>
-	  <a class="button" ng-click="scanBarcode()" style="width:30%">바코드</a>&nbsp;
+	  <a class="button" ng-click="scanBarcode(1)" style="width:30%">바코드</a>&nbsp;
 	 </div>
 
   <div class="button-bar" style="width:100% align:center; padding:5px; border:1px solid #eee;">
     &nbsp;&nbsp;<i class="icon ion-search placeholder-icon"s></i>
-    <input type="text" placeholder="상품명을 입력하세요" size="40">
-    <a class="button" ng-click="modesear('Select_GoodsName')">검색</a>
+    <input type="text" placeholder="상품명을 입력하세요">
+    <a class="button button-clear" ng-click="modesear('Select_GoodsName',1)">검색</a>
   </div>
 
 	<div align="center"> 

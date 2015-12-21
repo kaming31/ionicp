@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-var exampleApp = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
+var exampleApp = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'pickadate'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -94,7 +94,7 @@ var exampleApp = angular.module('starter', ['ionic', 'starter.controllers', 'ngC
       views: {
         'menuContent': {
           templateUrl: 'templates/meaipChit.html',
-          controller: 'MaippartsCtrl'
+          controller: 'MaipSearchCtrl'
         }
       }
     });
