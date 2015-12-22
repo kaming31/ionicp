@@ -868,19 +868,24 @@ $ionicModal.fromTemplateUrl('templates/datemodal.html',
        Il_No : ''
    };
   $scope.ss=function(ss) {
-
-    $scope.meaipm = '<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>'+ss[0].Meaip_Date+'</Meaip_Date><GuMeaCom_Code>'+$scope.maipbasiclist.Comp_no+'</GuMeaCom_Code><Meaip_Amt>'+$scope.pricesum+'</Meaip_Amt><Sale_Place>'+$scope.listpp.mejangcodenum+'</Sale_Place><Remk><![CDATA[]]></Remk></MeaipM><MeaipT>'
+    $scope.meaipm = '<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>'+ss[0].Meaip_Date+'</Meaip_Date><GuMeaCom_Code>'+$scope.maipbasiclist.Comp_no+'</GuMeaCom_Code><Meaip_Amt>'+$scope.pricesum+'</Meaip_Amt><Sale_Place>'+$scope.listpp.mejangcodenum+'</Sale_Place><Remk><![CDATA['+$scope.meaipchitlists[0].Remk+']]></Remk></MeaipM><MeaipT>'
     $scope.meaipt = '';
     $scope.meaipend = '</MeaipT></root>';
     for (var i = 0; i < ss.length; i++) {
       var j = i+1; // seq
-      $scope.meaipt = $scope.meaipt+'<item><seq>'+j+'</seq><ChangGo_Code>'+$scope.listpp.changocodenum+'</ChangGo_Code><subul_kind>'+ss[i].Subul_kindnum+'</subul_kind><G_Code>'+ss[i].G_Code+'</G_Code><G_name><![CDATA['+escape(ss[i].G_Name)+']]></G_name><G_stand><![CDATA['+ss[i].G_stand+']]></G_stand><G_Price>'+ss[i].G_Price+'</G_Price><G_Qty>'+ss[i].G_Qty+'</G_Qty><G_vat>'+1800+'</G_vat></item>';
+      if (ss[i].Subul_kind == '매입입고') {
+        ss[i].Subul_kind = 111;
+      }else if(ss[i].Subul_kind == '매입반폼'){
+        ss[i].Subul_kind = 122;
+      };
+      $scope.meaipt = $scope.meaipt+'<item><seq>'+j+'</seq><ChangGo_Code>'+$scope.listpp.changocodenum+'</ChangGo_Code><subul_kind>'+ss[i].Subul_kind+'</subul_kind><G_Code>'+ss[i].G_Code+'</G_Code><G_name><![CDATA['+ss[i].G_Name+']]></G_name><G_stand><![CDATA['+ss[i].G_stand+']]></G_stand><G_Price>'+ss[i].G_Price+'</G_Price><G_Qty>'+ss[i].G_Qty+'</G_Qty><G_vat>'+1800+'</G_vat></item>';
     };
-    $scope.meaipupdatetlists.RequestXml = $scope.meaipm+$scope.meaipt+$scope.meaipend;
+   /* $scope.meaipupdatetlists.RequestXml = $scope.meaipm+$scope.meaipt+$scope.meaipend;*/
+    var updateXml = escape($scope.meaipm+$scope.meaipt+$scope.meaipend);
     $scope.meaipupdatetlists.Il_No = ss[0].iL_No;
     console.log($scope.meaipupdatetlists.RequestXml);
 
-      $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.meaipupdatetlists}).
+      $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code=onz&User_id=pikapika&Kind=ERPia_Meaip_Update_Goods&Mode=Update_Meaip&RequestXml='+updateXml+'&Il_No='+$scope.meaipupdatetlists.Il_No).
         success(function(data, status, headers, config) {
           $ionicPopup.alert({
 
@@ -908,6 +913,7 @@ $ionicModal.fromTemplateUrl('templates/datemodal.html',
 
      /* 해당 리스트항목 삭제 */
    $scope.goodsDe=function(index){
+
     if ($scope.meaipchitlists.length == 1) {
       $ionicPopup.show({
          title: '경고',
@@ -981,7 +987,8 @@ $ionicModal.fromTemplateUrl('templates/datemodal.html',
          Meaip_Date : $scope.meaipchitlists[0].Meaip_Date,
          Subul_kind : $scope.meaipchitlists[0].Subul_kind,
          GerName : $scope.meaipchitlists[0].GerName,
-         iL_No : $scope.meaipchitlists[0].iL_No
+         iL_No : $scope.meaipchitlists[0].iL_No,
+         Remk : $scope.meaipchitlists[0].Remk
      });
      }
 
@@ -1332,20 +1339,18 @@ $scope.andUrl = 'http://erpia.net';
   /* 매입 등록! */
   $scope.insertGoodsF = function() {
 
-    $scope.maipbasiclist.remk2 = escape($scope.maipbasiclist.remk);
-
-    $scope.meaipm = '<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>'+$scope.maipbasiclist.maip_date+'</Meaip_Date><GuMeaCom_Code>'+$scope.maipbasiclist.Comp_no+'</GuMeaCom_Code><Meaip_Amt>'+$scope.pricesumGoods+'</Meaip_Amt><Sale_Place>'+$scope.maipbasiclist.Mejang_Code+'</Sale_Place><Remk><![CDATA['+$scope.maipbasiclist.remk2+']]></Remk></MeaipM><MeaipT>'
+    $scope.meaipm = '<root><MeaipM><Admin_Code>onz</Admin_Code><Meaip_Date>'+$scope.maipbasiclist.maip_date+'</Meaip_Date><GuMeaCom_Code>'+$scope.maipbasiclist.Comp_no+'</GuMeaCom_Code><Meaip_Amt>'+$scope.pricesumGoods+'</Meaip_Amt><Sale_Place>'+$scope.maipbasiclist.Mejang_Code+'</Sale_Place><Remk><![CDATA['+$scope.maipbasiclist.remk+']]></Remk></MeaipM><MeaipT>'
     $scope.meaipt = '';
     $scope.meaipend = '</MeaipT></root>';
+
     for (var i = 0; i < $scope.addlists.length; i++) {
       var j = i+1; // seq
-      $scope.addlists[i].namegoods2 = escape($scope.addlists[i].namegoods);
-      $scope.meaipt = $scope.meaipt+'<item><seq>'+j+'</seq><ChangGo_Code>'+$scope.maipbasiclist.ChangGo_Code+'</ChangGo_Code><subul_kind>'+$scope.maipbasiclist.subul_kind+'</subul_kind><G_Code>'+$scope.addlists[i].codegoods+'</G_Code><G_name><![CDATA['+$scope.addlists[i].namegoods2+']]></G_name><G_stand><![CDATA['+escape($scope.addlists[i].standgoods)+']]></G_stand><G_Price>'+$scope.addlists[i].gdngoods+'</G_Price><G_Qty>'+$scope.addlists[i].numgoods+'</G_Qty><G_vat>'+1800+'</G_vat></item>';
+      $scope.meaipt = $scope.meaipt+'<item><seq>'+j+'</seq><ChangGo_Code>'+$scope.maipbasiclist.ChangGo_Code+'</ChangGo_Code><subul_kind>'+$scope.maipbasiclist.subul_kind+'</subul_kind><G_Code>'+$scope.addlists[i].codegoods+'</G_Code><G_name><![CDATA['+$scope.addlists[i].namegoods+']]></G_name><G_stand><![CDATA['+$scope.addlists[i].standgoods+']]></G_stand><G_Price>'+$scope.addlists[i].gdngoods+'</G_Price><G_Qty>'+$scope.addlists[i].numgoods+'</G_Qty><G_vat>'+1800+'</G_vat></item>';
     };
-    $scope.meaipinsertlists.RequestXml = $scope.meaipm+$scope.meaipt+$scope.meaipend;
+    var test3 = escape($scope.meaipm+$scope.meaipt+$scope.meaipend);
+     /*$scope.meaipinsertlists.RequestXml = test3;*/
     console.log($scope.meaipinsertlists.RequestXml);
-
-      $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.meaipinsertlists}).
+      $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp?Admin_Code=onz&User_id=pikapika&Kind=ERPia_Meaip_Insert_Goods&Mode=&RequestXml='+test3).
         success(function(data, status, headers, config) {
           $ionicPopup.alert({
 

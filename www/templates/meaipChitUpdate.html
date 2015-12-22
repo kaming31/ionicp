@@ -80,7 +80,7 @@
             <td>{{y.G_Name}}</td>
             <td><input type="number" min="1" max="999" value="{{y.G_Qty}}" ng-model="y.G_Qty"></td>
             <td>{{y.G_Price}}</td>
-            <td><i class="ion-android-remove-circle" ng-click="goodsDe($index)"></i>&nbsp;</td>
+            <td><i class="ion-android-remove-circle" style="font-size:25px" ng-click="goodsDe($index)"></i>&nbsp;</td>
           </tr>
           <tr>
             <td colspan="4"><hr></td>
@@ -88,7 +88,14 @@
           <tr>
             <td colspan="4" align="right"><b>총 {{qtysum}}개 / {{pricesum}}원</b>&nbsp;&nbsp;&nbsp;&nbsp;</td>
           </tr>
-        </table><br><br>
+        </table>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">관리 비고</span>
+
+          <textarea placeholder="관리자비고란 입니다." ng-model="meaipchitlists[0].Remk">
+          </textarea>
+        </label>
+        <hr>
     <ion-item ng-click="ss(meaipchitlists)">
       저장
     </ion-item>
