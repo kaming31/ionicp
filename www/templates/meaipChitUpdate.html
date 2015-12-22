@@ -58,7 +58,7 @@
               </select>&nbsp;&nbsp;
           </td>
           <td>
-              <input type="text" placeholder="상품명을 입력하세요" size="20" ng-model="search.gName">
+              <input type="text" placeholder="상품명을 입력하세요" size="20" ng-model="mm.ser">
           </td>
           <td><i class="ion-search" style="font-size:30px" ng-click="modesear('Select_GoodsName',2)"></i></td>
           <td><i class="ion-ios-barcode" style="font-size:30px" ng-click="scanBarcode(2)"></i></td>
@@ -80,7 +80,7 @@
             <td>{{y.G_Name}}</td>
             <td><input type="number" min="1" max="999" value="{{y.G_Qty}}" ng-model="y.G_Qty"></td>
             <td>{{y.G_Price}}</td>
-            <td><i class="ion-android-remove-circle" style="font-size:25px" ng-click="goodsDe($index)"></i>&nbsp;</td>
+            <td><i class="ion-android-remove-circle" style="font-size:25px" ng-click="goodsDe($index)" ></i>&nbsp;</td>
           </tr>
           <tr>
             <td colspan="4"><hr></td>

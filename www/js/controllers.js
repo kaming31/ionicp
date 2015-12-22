@@ -348,9 +348,13 @@ $ionicModal.fromTemplateUrl('templates/customer.html', {
     $rootScope.cusSearchnum = num;
     $scope.modalcustomer.show();
   };
-
+$scope.cus = {
+  GerName : ''
+};
  /* 거래처 검색 */
   $scope.cusSearch = function(){
+    var ger = $scope.cus.GerName;
+    $scope.customerSearchlists.GerName = escape(ger);
     $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.customerSearchlists}).
       success(function(data, status, headers, config) {
 
@@ -548,6 +552,7 @@ $ionicModal.fromTemplateUrl('templates/datemodal.html',
 
       //매입전표조회 function
      $scope.meaipChitF=function(ilno){
+      $scope.deleicon = true;
       $scope.meaipChitList.IL_No = ilno;
       $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.meaipChitList}).
         success(function(data, status, headers, config) {
@@ -996,7 +1001,7 @@ $ionicModal.fromTemplateUrl('templates/datemodal.html',
 })
 
 
-.controller('MaippartsCtrl', function($scope, $ionicModal, $timeout, $stateParams, $http, $cordovaBarcodeScanner, $ionicPopup) {
+.controller('MaippartsCtrl', function($scope, $ionicModal, $timeout, $stateParams,$rootScope, $http, $cordovaBarcodeScanner, $ionicPopup) {
 $scope.httpUrl = '/app';
 $scope.andUrl = 'http://erpia.net';
 //상품명 조회시
@@ -1174,15 +1179,36 @@ $scope.andUrl = 'http://erpia.net';
     $scope.closemodesear = function() {
     $scope.modalmodesear.hide();
     };
-
+ 
+    $scope.mm = {
+      ser : ''
+    };
     // 검색창 보여주기
     $scope.modesear = function(divimode,divinum) {
       $scope.modedivition.seaname='';
       $scope.goodslists='';
-      if (divimode == "Select_GoodsName") {
+      if (divimode == "Select_GoodsName") {http://localhost:8100/ionic-lab
         $scope.checkval = "상품명조회";
-        $scope.ex = "상품명을 입력해주세요";
+        $scope.ex = $scope.mm.ser;
         $scope.exs = 1;
+        if ($scope.ex.length > 0) {
+            var exex = escape($scope.ex);
+            $scope.GoodsNamelist.GoodsName = exex;
+            $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.GoodsNamelist}).
+              success(function(data, status, headers, config) {
+
+                $scope.goodslists = data.list;
+              }).
+              error(function(data, status, headers, config) {
+
+                var alertPopup = $ionicPopup.alert({
+
+                        title: 'Login failed!',
+
+                        template: 'Please check your credentials!'
+              });
+              });
+        };
       }else{
         if ($scope.modedivition.mode == "Select_G_Code") {
             $scope.checkval = "상품코드조회";
@@ -1215,19 +1241,19 @@ $scope.andUrl = 'http://erpia.net';
       if ($scope.checkval == "상품명조회") {
         $scope.GoodsNamelist.GoodsName = escape($scope.modedivition.seaname);
         $http.get($scope.andUrl+'/include/ERPiaApi_TestProject.asp',{params: $scope.GoodsNamelist}).
-      success(function(data, status, headers, config) {
+          success(function(data, status, headers, config) {
 
-        $scope.goodslists = data.list;
-      }).
-      error(function(data, status, headers, config) {
+            $scope.goodslists = data.list;
+          }).
+          error(function(data, status, headers, config) {
 
-        var alertPopup = $ionicPopup.alert({
+            var alertPopup = $ionicPopup.alert({
 
-                title: 'Login failed!',
+                    title: 'Login failed!',
 
-                template: 'Please check your credentials!'
-      });
-      });
+                    template: 'Please check your credentials!'
+          });
+          });
 
       }else if ($scope.checkval == "상품코드조회") { 
         $scope.goodscodelist.GoodsCode = $scope.modedivition.seaname;
